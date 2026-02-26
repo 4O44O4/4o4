@@ -3,24 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning Portal</title>
+    <!-- TAB CLOAK -->
+    <title>Google Docs</title>
+    <link rel="icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">
+    
     <style>
-        body { font-family: sans-serif; background-color: #1a1a1a; color: white; text-align: center; margin: 0; padding: 20px; }
-        .game-container { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
-        iframe { border: 4px solid #333; border-radius: 10px; width: 800px; height: 600px; max-width: 95%; }
-        h1 { color: #4CAF50; }
+        :root { --bg: #0b0b0b; --side: #121212; --accent: #4CAF50; --text: #efefef; --card: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar Navigation */
+        #sidebar { width: 240px; background: var(--side); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 20px 10px; flex-shrink: 0; overflow-y: auto; }
+        .cat-btn { background: none; border: none; color: #aaa; text-align: left; padding: 12px; cursor: pointer; border-radius: 8px; font-size: 14px; transition: 0.2s; margin-bottom: 2px; }
+        .cat-btn:hover, .cat-btn.active { background: #222; color: var(--accent); }
+        h2 { font-size: 11px; color: #555; text-transform: uppercase; margin: 20px 0 10px 10px; letter-spacing: 1px; }
+
+        /* Main Content */
+        #main { flex-grow: 1; display: flex; flex-direction: column; }
+        
+        /* Top Nav Bar */
+        #top-nav { background: #121212; padding: 10px 20px; display: flex; gap: 15px; align-items: center; border-bottom: 1px solid #222; }
+        #search { flex-grow: 1; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 6px; color: white; outline: none; }
+        .panic-btn { background: #b71c1c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+        /* Mirror Switcher Bar (Appears when game is open) */
+        #mirror-bar { background: #1a1a1a; padding: 10px 20px; display: none; gap: 10px; align-items: center; border-bottom: 1px solid #333; }
+        .mirror-btn { background: #333; border: 1px solid #444; color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .mirror-btn:hover { background: var(--accent); }
+        .mirror-btn.active { background: var(--accent); border-color: white; }
+
+        /* Grid and Instructions */
+        #content-area { flex-grow: 1; overflow-y: auto; padding: 20px; }
+        #instructions-box { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #aaa; font-size: 14px; line-height: 1.6; }
+        #instructions-box b { color: var(--accent); }
+        
+        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .game-card { background: var(--card); border: 1px solid #333; padding: 15px 5px; border-radius: 10px; cursor: pointer; text-align: center; font-size: 13px; transition: 0.2s; }
+        .game-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+        /* Game Player */
+        #player-container { flex-grow: 1; background: black; display: none; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
+        #close-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: 1px solid white; padding: 5px 10px; cursor: pointer; border-radius: 5px; z-index: 10; }
     </style>
 </head>
-<body>
+<body onload="init()">
 
-    <h1>Project Dashboard</h1>
-    <p>Select a module to begin.</p>
-
-    <div class="game-container">
-        <!-- PASTE YOUR FIRST EMBED CODE BELOW THIS LINE -->
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <h1 style="color:var(--accent); margin-left:10px; font-size:20px;">Project Hub</h1>
+        <button class="cat-btn active" onclick="filterCat('All')">🏠 Home / All Games</button>
         
-        <!-- PASTE YOUR FIRST EMBED CODE ABOVE THIS LINE -->
+        <h2>Sections</h2>
+        <button class="cat-btn" onclick="filterCat('Parkour')">🏃 Vex & Parkour</button>
+        <button class="cat-btn" onclick="filterCat('Duck')">🦆 Duck Life</button>
+        <button class="cat-btn" onclick="filterCat('StickDrive')">🚗 Stick Driving</button>
+        <button class="cat-btn" onclick="filterCat('Stick2P')">👥 Stick 2-Player</button>
+        <button class="cat-btn" onclick="filterCat('Clicker')">🖱️ Clickers</button>
+        <button class="cat-btn" onclick="filterCat('Racing')">🚦 Drift & Speed</button>
+        <button class="cat-btn" onclick="filterCat('Horror')">👻 Horror</button>
+        <button class="cat-btn" onclick="filterCat('Other')">📦 Other</button>
     </div>
 
+    <!-- MAIN AREA -->
+    <div id="main">
+        <div id="top-nav">
+            <input type="text" id="search" placeholder="Search for a module..." oninput="search()">
+            <button class="panic-btn" onclick="window.location.replace('https://classroom.google.com')">PANIC (ESC)</button>
+        </div>
+
+        <!-- MIRROR SWITCHER -->
+        <div id="mirror-bar">
+            <span style="font-size:12px; color:#888;">Mirror Blocked? <b>Try another:</b></span>
+            <div id="mirror-btns" style="display:flex; gap:5px;"></div>
+        </div>
+
+        <!-- GRID AREA -->
+        <div id="content-area">
+            <div id="instructions-box">
+                <b>HOW TO USE:</b><br>
+                1. Click a game card to begin. <br>
+                2. If the game is blocked, use the <b>Mirror Buttons</b> that appear at the top.<br>
+                3. Press <b>ESC</b> at any time to instantly jump to Google Classroom (Panic Key).<br>
+                4. This tab is cloaked as <b>Google Docs</b> to hide from tab-trackers.
+            </div>
+            <div id="game-grid"></div>
+        </div>
+
+        <!-- PLAYER AREA -->
+        <div id="player-container">
+            <button id="close-btn" onclick="closeGame()">Close Game [X]</button>
+            <iframe id="game-view" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        // MASTER DATABASE: Every game has at least 2 mirrors
+        const games = [
+            // PARKOUR
+            { n: "Vex 3", c: "Parkour", m: ["https://mathadventure1.github.io/vex3/vex3/index.html", "https://6xbook.github.io/vex3/index.html"] },
+            { n: "Vex 4", c: "Parkour", m: ["https://mathadventure1.github.io/vex4/vex4/index.html", "https://6xbook.github.io/vex4/index.html"] },
+            { n: "Vex 5", c: "Parkour", m: ["https://mathadventure1.github.io/vex5/vex5/index.html", "https://6xbook.github.io/vex5/index.html"] },
+            { n: "Vex 6", c: "Parkour", m: ["https://6xbook.github.io/vex6/index.html", "https://mathadventure1.github.io/vex6/index.html"] },
+            { n: "Vex 7", c: "Parkour", m: ["https://skm-games.github.io/vex-7/", "https://ubg98.github.io/Vex7/"] },
+            { n: "Vex 8", c: "Parkour", m: ["https://777-games.github.io/vex-8/", "https://ubg98.github.io/Vex8/"] },
+            { n: "Big Tower", c: "Parkour", m: ["https://bigtower-tinysquare.github.io/", "https://6xbook.github.io/big-tower-tiny-square/"] },
+            { n: "OvO", c: "Parkour", m: ["https://ovogame.github.io/", "https://6xbook.github.io/ovo/"] },
+
+            // DUCK LIFE
+            { n: "Duck Life 1", c: "Duck", m: ["https://6xbook.github.io/duck-life/index.html", "https://ubg98.github.io/DuckLife/"] },
+            { n: "Duck Life 2", c: "Duck", m: ["https://6xbook.github.io/duck-life-2/index.html", "https://ubg98.github.io/DuckLife2/"] },
+            { n: "Duck Life 3", c: "Duck", m: ["https://6xbook.github.io/duck-life-3/index.html", "https://ubg98.github.io/DuckLife3/"] },
+            { n: "Duck Life 4", c: "Duck", m: ["https://6xbook.github.io/duck-life-4/index.html", "https://ubg98.github.io/DuckLife4/"] },
+
+            // CLICKERS
+            { n: "Cookie Clicker", c: "Clicker", m: ["https://6xbook.github.io/cookie-clicker/index.html", "https://game316022.konggames.com/gamez/0031/6022/live/index.html"] },
+            { n: "Capybara Clicker", c: "Clicker", m: ["https://capybaraclicker.github.io/", "https://ubg98.github.io/CapybaraClicker/"] },
+            { n: "Monkey Mart", c: "Clicker", m: ["https://6xbook.github.io/monkey-mart/index.html", "https://ubg98.github.io/MonkeyMart/"] },
+
+            // RACING
+            { n: "Drift Boss", c: "Racing", m: ["https://drifthunters.github.io/drift-boss/", "https://ubg98.github.io/DriftBoss/"] },
+            { n: "Drift Hunters", c: "Racing", m: ["https://drifthunters.github.io/", "https://ubg98.github.io/DriftHunters/"] },
+            { n: "Moto X3M", c: "Racing", m: ["https://6xbook.github.io/moto-x3m/index.html", "https://ubg98.github.io/MotoX3M/"] },
+
+            // HORROR
+            { n: "FNAF 1", c: "Horror", m: ["https://6xbook.github.io/fnaf1/index.html", "https://ubg98.github.io/FNAF1/"] },
+            { n: "FNAF 2", c: "Horror", m: ["https://6xbook.github.io/fnaf2/index.html", "https://ubg98.github.io/FNAF2/"] }
+        ];
+
+        // This script automatically pads the lists to 50 games each so your site is massive
+        const cats = ["Parkour", "Duck", "StickDrive", "Stick2P", "Clicker", "Racing", "Horror", "Other"];
+        cats.forEach(category => {
+            let existing = games.filter(g => g.c === category).length;
+            for (let i = existing + 1; i <= 50; i++) {
+                games.push({ n: `${category} Module ${i}`, c: category, m: ["https://ubg98.github.io/", "https://6xbook.github.io/"] });
+            }
+        });
+
+        function init() {
+            filterCat('All');
+            // TAB CLOAK LOGIC
+            setInterval(() => {
+                document.title = "Google Docs";
+                let l = document.querySelector("link[rel*='icon']") || document.createElement('link');
+                l.rel = 'shortcut icon'; l.href = 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico';
+                document.getElementsByTagName('head')[0].appendChild(l);
+            }, 100);
+        }
+
+        function filterCat(c) {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            const list = c === 'All' ? games : games.filter(g => g.c === c);
+            list.forEach(g => {
+                let d = document.createElement('div');
+                d.className = 'game-card';
+                d.innerText = g.n;
+                d.onclick = () => selectGame(g);
+                grid.appendChild(d);
+            });
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(c)));
+            // Show instructions only on Home/All
+            document.getElementById('instructions-box').style.display = (c === 'All') ? 'block' : 'none';
+        }
+
+        function selectGame(g) {
+            document.getElementById('content-area').style.display = 'none';
+            document.getElementById('player-container').style.display = 'block';
+            document.getElementById('mirror-bar').style.display = 'flex';
+            
+            const mContainer = document.getElementById('mirror-btns');
+            mContainer.innerHTML = '';
+            
+            g.m.forEach((url, index) => {
+                let b = document.createElement('button');
+                b.className = 'mirror-btn';
+                b.innerText = `Mirror ${index + 1}`;
+                b.onclick = () => {
+                    document.getElementById('game-view').src = url;
+                    document.querySelectorAll('.mirror-btn').forEach(btn => btn.classList.remove('active'));
+                    b.classList.add('active');
+                };
+                mContainer.appendChild(b);
+                if(index === 0) b.click(); // Auto-load first mirror
+            });
+        }
+
+        function closeGame() {
+            document.getElementById('game-view').src = '';
+            document.getElementById('player-container').style.display = 'none';
+            document.getElementById('mirror-bar').style.display = 'none';
+            document.getElementById('content-area').style.display = 'block';
+        }
+
+        function search() {
+            let t = document.getElementById('search').value.toLowerCase();
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            games.filter(g => g.n.toLowerCase().includes(t)).forEach(g => {
+                let d = document.createElement('div');
+                d.className = 'game-card';
+                d.innerText = g.n;
+                d.onclick = () => selectGame(g);
+                grid.appendChild(d);
+            });
+        }
+
+        // PANIC KEY
+        document.addEventListener('keydown', (e) => { 
+            if(e.key === "Escape") window.location.replace("https://classroom.google.com"); 
+        });
+    </script>
 </body>
 </html>
