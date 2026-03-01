@@ -9,60 +9,77 @@
     
     <style>
         :root { --bg: #0b0b0b; --side: #121212; --accent: #4CAF50; --text: #efefef; --card: #1e1e1e; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Reset to ensure no white gaps around the game */
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); overflow: hidden; display: flex; }
 
-        /* Sidebar Navigation */
-        #sidebar { width: 240px; background: var(--side); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 20px 10px; flex-shrink: 0; overflow-y: auto; }
+        /* Sidebar: Fixed left */
+        #sidebar { 
+            width: 240px; 
+            background: var(--side); 
+            border-right: 1px solid #222; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 20px 10px; 
+            flex-shrink: 0; 
+        }
         .side-btn { background: none; border: none; color: #aaa; text-align: left; padding: 12px; cursor: pointer; border-radius: 8px; font-size: 14px; transition: 0.2s; margin-bottom: 5px; }
         .side-btn:hover, .side-btn.active { background: #222; color: var(--accent); }
         h2 { font-size: 11px; color: #555; text-transform: uppercase; margin: 20px 0 10px 10px; letter-spacing: 1px; }
 
-        /* Main Content Area */
-        #main { flex-grow: 1; display: flex; flex-direction: column; }
+        /* Main Content Column */
+        #main { display: flex; flex-direction: column; flex-grow: 1; height: 100vh; }
         
-        /* Top Bar: Cloaking & Panic */
-        #top-nav { background: #121212; padding: 10px 20px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid #222; }
+        /* Top Bar: Fixed height */
+        #top-nav { 
+            height: 60px; 
+            background: #121212; 
+            padding: 0 20px; 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            border-bottom: 1px solid #222; 
+            flex-shrink: 0; 
+        }
         .cloak-btn { padding: 6px 10px; border: 1px solid #333; background: #1a1a1a; color: #888; border-radius: 4px; cursor: pointer; font-size: 11px; }
         .cloak-btn:hover { border-color: var(--accent); color: white; }
-        
-        #search { flex-grow: 1; background: #1a1a1a; border: 1px solid #333; padding: 8px; border-radius: 6px; color: white; outline: none; }
-        .panic-btn { background: #b71c1c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        #search { flex-grow: 1; background: #1a1a1a; border: 1px solid #333; padding: 10px; border-radius: 6px; color: white; outline: none; }
+        .panic-btn { background: #b71c1c; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-        /* The Game Grid */
+        /* Content Area: Grid */
         #content-area { flex-grow: 1; overflow-y: auto; padding: 20px; }
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .game-card { background: var(--card); border: 1px solid #333; padding: 15px 5px; border-radius: 10px; cursor: pointer; text-align: center; font-size: 13px; transition: 0.2s; min-height: 55px; display: flex; align-items: center; justify-content: center; font-weight: 500; }
-        .game-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .game-card { background: var(--card); border: 1px solid #333; padding: 25px 10px; border-radius: 12px; cursor: pointer; text-align: center; font-size: 14px; transition: 0.3s; font-weight: bold; }
+        .game-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-        /* The Game Player */
-        #player-container { flex-grow: 1; background: black; display: none; position: relative; }
-        iframe { width: 100%; height: 100%; border: none; }
-        #close-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: 1px solid white; padding: 5px 10px; cursor: pointer; border-radius: 5px; z-index: 100; }
+        /* FULLSCREEN PLAYER AREA */
+        #player-container { 
+            display: none; 
+            flex-grow: 1; /* Takes up all space between top and bottom */
+            background: black; 
+            width: 100%;
+        }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
     </style>
 </head>
 <body onload="init()">
 
-    <!-- SIDEBAR -->
     <div id="sidebar">
         <h1 style="color:var(--accent); margin-left:10px; font-size:20px; margin-bottom:20px;">Project Hub</h1>
-        
+        <!-- HOME BUTTON: Resets view -->
         <button class="side-btn active" onclick="goHome()">🏠 Home (All Games)</button>
         
-        <h2>Categories</h2>
-        <button class="side-btn" onclick="renderGames('Evolution')">Duck Life</button>
-        <button class="side-btn" onclick="renderGames('Racing')">Racing</button>
-        <button class="side-btn" onclick="renderGames('Clicker')">Stratagy</button>
-        <button class="side-btn" onclick="renderGames('Other')">Other</button>
+        <h2>Filter</h2>
+        <button class="side-btn" onclick="renderGames('Evolution')">🦆 Duck Life</button>
+        <button class="side-btn" onclick="renderGames('Racing')">🚦 Racing</button>
     </div>
 
-    <!-- MAIN AREA -->
     <div id="main">
         <div id="top-nav">
-            <span style="font-size:10px; color:#444;">CLOAK:</span>
             <button class="cloak-btn" onclick="setCloak('docs')">Docs</button>
             <button class="cloak-btn" onclick="setCloak('classroom')">Classroom</button>
             <button class="cloak-btn" onclick="setCloak('slides')">Slides</button>
-            <button class="cloak-btn" onclick="setCloak('classlink')">ClassLink</button>
             
             <input type="text" id="search" placeholder="Search modules..." oninput="renderGames()">
             
@@ -74,8 +91,7 @@
         </div>
 
         <div id="player-container">
-            <button id="close-btn" onclick="closeGame()">Close Game [X]</button>
-            <iframe id="game-view" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock" src=""></iframe>
+            <iframe id="game-view" src=""></iframe>
         </div>
     </div>
 
@@ -83,42 +99,40 @@
         // ==========================================
         // 1. CUSTOM SETTINGS
         // ==========================================
-        const customPanicURL = "https://classroom.google.com"; 
+        const customPanicURL = "https://classroom.google.com"; // <-- CHANGE THIS TO YOUR URL
 
-        // ==========================================
-        // 2. GAME LIST
-        // ==========================================
         const gameList = [
             { name: "Duck Life 1", path: "./duck-life-1/index.html", cat: "Evolution" },
             { name: "Duck Life 2", path: "./ducklife2/index.html", cat: "Evolution" },
             { name: "Duck Life 3", path: "./ducklife3/index.html", cat: "Evolution" },
             { name: "Drift Boss", path: "./drift-boss/index.html", cat: "Racing" },
             { name: "Slope", path: "./slope/index.html", cat: "Racing" },
-            { name: "2048", path: "./2048/index.html", cat: "Other" },
-            { name: "Flappy Bird", path: "./flappybird/index.html", cat: "Other" },
-
-            // --- EMPTY SLOTS ---
-            { name: "Worlds Hardest Game", path: "./worlds-hardest-game/index.html", cat: "Stratagy" },
+            { name: "Flappy Bird", path: "./flappybird/index.html", cat: "Other" }
+            { name: "Worlds Hardest Game", path: "./worlds-hardest-game/index.html", cat: "Other" }
+            { name: "2048", path: "./2048/index.html", cat: "Other" }
+            { name: "", path: "", cat: "" }
+            { name: "", path: "", cat: "" }
             { name: "", path: "", cat: "" }
         ];
 
         // ==========================================
-        // 3. SYSTEM ENGINE
+        // 2. SYSTEM LOGIC
         // ==========================================
         
         function panic() { window.location.replace(customPanicURL); }
         document.addEventListener('keydown', (e) => { if (e.key === "Escape") panic(); });
 
         function goHome() {
-            closeGame();
+            document.getElementById('game-view').src = '';
+            document.getElementById('player-container').style.display = 'none';
+            document.getElementById('content-area').style.display = 'block';
             renderGames('All');
         }
 
         const cloaks = {
             docs: { t: "Google Docs", i: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
             classroom: { t: "Classes", i: "https://ssl.gstatic.com/classroom/favicon.png" },
-            slides: { t: "Google Slides", i: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
-            classlink: { t: "Login", i: "https://www.classlink.com/favicon.ico" }
+            slides: { t: "Google Slides", i: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" }
         };
 
         function setCloak(type) {
@@ -129,44 +143,29 @@
         function applyCloak() {
             let type = localStorage.getItem('cloakPref') || 'docs';
             document.title = cloaks[type].t;
-            let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-            link.href = cloaks[type].i;
-            document.getElementsByTagName('head')[0].appendChild(link);
+            let link = document.getElementById("tab-icon") || document.querySelector("link[rel*='icon']");
+            if (link) link.href = cloaks[type].i;
         }
-        setInterval(applyCloak, 100);
 
         function renderGames(filter = 'All') {
             const grid = document.getElementById('game-grid');
             const term = document.getElementById('search').value.toLowerCase();
             grid.innerHTML = '';
 
-            gameList.forEach(g => {
-                if (g.name === "") return;
-                const matchesFilter = (filter === 'All' || g.cat === filter);
-                const matchesSearch = g.name.toLowerCase().includes(term);
-
-                if (matchesFilter && matchesSearch) {
-                    const card = document.createElement('div');
-                    card.className = 'game-card';
-                    card.innerText = g.name;
-                    card.onclick = () => {
-                        document.getElementById('content-area').style.display = 'none';
-                        document.getElementById('player-container').style.display = 'block';
-                        document.getElementById('game-view').src = g.path;
-                    };
-                    grid.appendChild(card);
-                }
+            gameList.filter(g => (filter === 'All' || g.cat === filter) && g.name.toLowerCase().includes(term)).forEach(g => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerText = g.name;
+                card.onclick = () => {
+                    document.getElementById('content-area').style.display = 'none';
+                    document.getElementById('player-container').style.display = 'block';
+                    document.getElementById('game-view').src = g.path;
+                };
+                grid.appendChild(card);
             });
-            document.querySelectorAll('.side-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(filter) || (filter==='All' && b.innerText.includes('Home'))));
         }
 
-        function closeGame() {
-            document.getElementById('game-view').src = '';
-            document.getElementById('player-container').style.display = 'none';
-            document.getElementById('content-area').style.display = 'block';
-        }
-
-        function init() { renderGames(); applyCloak(); }
+        function init() { renderGames(); applyCloak(); setInterval(applyCloak, 100); }
     </script>
 </body>
 </html>
