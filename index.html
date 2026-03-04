@@ -91,7 +91,7 @@
         <div id="top-nav">
             <input type="text" id="search" placeholder="Search for games..." oninput="renderGames()">
             <button class="util-btn" onclick="toggleFullscreen()">Fullscreen</button>
-            <button class="panic-btn" onclick="panic()">PANIC (ESC)</button>
+            <button class="panic-btn" onclick="panic()">PANIC (SHIFT + ESC)</button>
         </div>
 
         <div id="content-area">
@@ -246,7 +246,10 @@
         }
 
         document.addEventListener('keydown', (e) => { 
-            if (e.key === "Escape") panic(); 
+            // Only trigger if both Shift and Escape are pressed
+            if (e.key === "Escape" && e.shiftKey) {
+                panic();
+            }
         });
     </script>
 </body>
