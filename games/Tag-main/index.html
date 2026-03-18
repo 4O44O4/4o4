@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <title>2 Player Tag – Free Online Browser Game</title>
+
+  <meta name="description" content="2 Player Tag is a fast-paced online browser game where two players compete as runner and tagger. Play free in your browser with keyboard controls.">
+  <meta name="keywords" content="2 player tag, tag game, two player game, browser tag game, local multiplayer game, html5 game">
+  <meta name="author" content="Mcant">
+
+  <meta property="og:title" content="2 Player Tag – Free Online Game">
+  <meta property="og:description" content="Play 2 Player Tag online. First to 10 wins in this fast-paced browser tag game.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourname.github.io/2playertag/">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <style>
+    html, body { height: 100%; margin: 0; background:#0d0782; font-family: system-ui, Arial; }
+    .wrap {
+      height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    canvas{
+      background:#0d0782;
+      border:2px solid #ffd400;
+      image-rendering: pixelated;
+      outline:none;
+      touch-action:none;
+
+      width: min(100vw, 100vh);
+      height: min(100vw, 100vh);
+      display:block;
+    }
+    :fullscreen canvas{
+      width: min(100vw, 100vh);
+      height: min(100vw, 100vh);
+    }
+
+    .ui{
+      position: fixed; inset: 0;
+      display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(circle at 50% 20%, rgba(255,212,0,.18), rgba(0,0,0,.65));
+      z-index: 6;
+    }
+    .card{
+      width: min(560px, 92vw);
+      background: rgba(10,10,25,.92);
+      border: 2px solid rgba(255,212,0,.35);
+      border-radius: 18px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+      position: relative;
+      overflow: hidden;
+    }
+    .glow{
+      position:absolute; inset:-40px;
+      background: conic-gradient(from 180deg, rgba(0,180,255,.0), rgba(0,180,255,.25), rgba(255,212,0,.2), rgba(0,180,255,.0));
+      filter: blur(30px);
+      opacity: .55;
+      animation: spin 6s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .title{ font-size: 26px; font-weight: 900; margin: 0 0 4px; letter-spacing: .4px; }
+    .dev{ opacity:.9; margin: 0 0 14px; font-weight: 700; }
+    .sub{ opacity: .85; margin: 0 0 14px; line-height: 1.35; }
+
+    .row{ display:flex; gap: 12px; flex-wrap: wrap; align-items:center; }
+    button{
+      cursor:pointer;
+      border: 2px solid rgba(0,180,255,.35);
+      background: rgba(18,18,50,.9);
+      color:#fff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+    }
+    button:hover{ background: rgba(25,25,70,.95); border-color: rgba(255,212,0,.5); }
+    button:active{ transform: translateY(1px); }
+
+    .sliderBox, .modeBox{
+      flex: 1 1 220px;
+      border: 2px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.04);
+    }
+    .sliderBox label, .modeBox label{ display:flex; justify-content:space-between; font-weight:800; opacity:.95; }
+    input[type="range"]{ width: 100%; margin-top: 8px; }
+
+    select{
+      width:100%;
+      margin-top: 8px;
+      padding:10px 10px;
+      border-radius:10px;
+      border:2px solid rgba(0,180,255,.25);
+      background: rgba(18,18,50,.9);
+      color:#fff;
+      font-weight:800;
+      outline:none;
+    }
+
+    .hint{ margin-top: 14px; opacity:.9; font-size: 13px; line-height:1.45; }
+    kbd{ background:#111; border:1px solid #333; border-bottom-width:2px; padding:2px 6px; border-radius:6px; }
+    .tip{
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: .85;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,212,0,.25);
+      background: rgba(255,212,0,.06);
+    }
+
+    .touchUI{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      display: none;
+      z-index: 5;
+    }
+    .joyWrap{
+      position: absolute;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      width: 28vw;
+      height: 28vw;
+      max-width: 160px;
+      max-height: 160px;
+      min-width: 100px;
+      min-height: 100px;
+      pointer-events: auto;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .joyWrap.left{ left: max(14px, env(safe-area-inset-left)); }
+    .joyWrap.right{ right: max(14px, env(safe-area-inset-right)); }
+
+    .joyBase{
+      position:absolute; inset:0;
+      border-radius: 999px;
+      background: rgba(0,0,0,.25);
+      border: 2px solid rgba(255,212,0,.35);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+    }
+    .joyKnob{
+      position:absolute;
+      left: 50%; top: 50%;
+      width: 36%;
+      height: 36%;
+      transform: translate(-50%,-50%);
+      border-radius: 999px;
+      background: rgba(0,180,255,.35);
+      border: 2px solid rgba(0,180,255,.65);
+      box-shadow: 0 10px 30px rgba(0,180,255,.18);
+    }
+    .joyLabel{
+      position:absolute;
+      top: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 900;
+      font-size: 12px;
+      color: rgba(255,255,255,.9);
+      text-shadow: 0 2px 10px rgba(0,0,0,.5);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .touchHint{
+      position:absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(max(14px, env(safe-area-inset-bottom)) + 230px);
+      background: rgba(10,10,25,.75);
+      border: 1px solid rgba(255,212,0,.25);
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255,255,255,.92);
+      pointer-events: none;
+      display: none;
+    }
+    @media (pointer: coarse) and (hover: none){
+      .touchUI{ display:block; }
+      .touchHint{ display:block; }
+    }
+
+    .overlayFX{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 7;
+      display: block;
+    }
+    .countText{
+      position:absolute;
+      left:50%; top: 18%;
+      transform: translateX(-50%);
+      font-weight: 1000;
+      font-size: min(92px, 16vw);
+      letter-spacing: 1px;
+      color: rgba(255,255,255,.96);
+      text-shadow: 0 10px 40px rgba(0,0,0,.6);
+      padding: 10px 18px;
+      border-radius: 18px;
+      border: 2px solid rgba(255,212,0,.25);
+      background: rgba(10,10,25,.35);
+      backdrop-filter: blur(6px);
+      display:none;
+    }
+    .popText{
+      position:absolute;
+      left:50%; top: 38%;
+      transform: translate(-50%,-50%) scale(1);
+      font-weight: 1000;
+      font-size: min(84px, 14vw);
+      letter-spacing: 2px;
+      color: rgba(255,255,255,.98);
+      text-shadow: 0 18px 60px rgba(0,0,0,.65);
+      display:none;
+    }
+    .rotateMsg{
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 18px;
+      background: radial-gradient(circle at 50% 30%, rgba(255,212,0,.10), rgba(0,0,0,.78));
+      pointer-events: none;
+    }
+    .rotateCard{
+      width: min(520px, 92vw);
+      background: rgba(10,10,25,.86);
+      border: 2px solid rgba(255,212,0,.30);
+      border-radius: 18px;
+      padding: 18px 16px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+      color: #fff;
+    }
+    .rotateTitle{
+      font-weight: 1000;
+      font-size: 22px;
+      margin-bottom: 8px;
+      letter-spacing:.3px;
+    }
+    .rotateSub{
+      opacity:.9;
+      font-weight: 800;
+      line-height: 1.35;
+      font-size: 14px;
+    }
+    .rotateIcon{
+      margin: 12px auto 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      border: 2px solid rgba(0,180,255,.35);
+      display:grid;
+      place-items:center;
+      font-size: 28px;
+      background: rgba(0,180,255,.10);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <canvas id="c" width="800" height="800"></canvas>
+  </div>
+
+  <div class="touchUI" id="touchUI" aria-hidden="true">
+    <div class="touchHint">Mobile controls: Left stick = P1 • Right stick = P2</div>
+
+    <div class="joyWrap left" id="joy1">
+      <div class="joyLabel">P1</div>
+      <div class="joyBase"></div>
+      <div class="joyKnob"></div>
+    </div>
+
+    <div class="joyWrap right" id="joy2">
+      <div class="joyLabel">P2</div>
+      <div class="joyBase"></div>
+      <div class="joyKnob"></div>
+    </div>
+  </div>
+
+  <div class="overlayFX" id="fx">
+    <div class="countText" id="countText">3</div>
+    <div class="popText" id="popText">TAG!</div>
+  </div>
+
+  <div class="rotateMsg" id="rotateMsg">
+    <div class="rotateCard">
+      <div class="rotateTitle">Rotate your device</div>
+      <div class="rotateSub">
+        For the best controls, turn your phone to <b>landscape</b>.
+        <br/>Then press <b>PLAY</b>.
+      </div>
+      <div class="rotateIcon">📱↩️</div>
+    </div>
+  </div>
+
+  <div class="ui" id="menu">
+    <div class="card">
+      <div class="glow"></div>
+
+      <p class="title">2PlayerTag</p>
+      <p class="dev">Dev: Mcant</p>
+      <p class="sub" id="modeDesc">
+        Classic: Survive <b>20 seconds</b> as runner to score.
+        <br/><b>First to 10</b> wins → back to menu.
+      </p>
+
+      <div class="row">
+        <button id="play">PLAY</button>
+        <button id="resetScore">RESET SCORE</button>
+        <button id="fsBtn">FULLSCREEN</button>
+
+        <div class="modeBox">
+          <label>
+            <span>Game Mode</span>
+            <span id="modeLabel">Classic</span>
+          </label>
+          <select id="mode">
+            <option value="classic" selected>Classic (First to 10)</option>
+            <option value="longest">Longest Run (2 rounds)</option>
+          </select>
+        </div>
+
+        <div class="sliderBox">
+          <label>
+            <span>Volume</span>
+            <span id="volLabel">70%</span>
+          </label>
+          <input id="vol" type="range" min="0" max="100" value="70" />
+        </div>
+      </div>
+
+      <div class="hint">
+        <div><b>Player 1 (top-left):</b> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+        <div><b>Player 2 (bottom-right):</b> Arrow Keys</div>
+        <div style="margin-top:8px;">Press <b>Esc</b> to go back to the menu.</div>
+        <div style="margin-top:8px; font-size:12px; opacity:.85;">
+          (Audio starts after your first click/key press because browsers block autoplay.)
+        </div>
+      </div>
+
+      <div class="tip" id="tipBox">Tip: (loads when you open the menu)</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("c");
+    const g = canvas.getContext("2d");
+
+    const menu = document.getElementById("menu");
+    const playBtn = document.getElementById("play");
+    const resetScoreBtn = document.getElementById("resetScore");
+    const fsBtn = document.getElementById("fsBtn");
+    const vol = document.getElementById("vol");
+    const volLabel = document.getElementById("volLabel");
+    const tipBox = document.getElementById("tipBox");
+
+    const modeSel = document.getElementById("mode");
+    const modeLabel = document.getElementById("modeLabel");
+    const modeDesc = document.getElementById("modeDesc");
+
+    const countText = document.getElementById("countText");
+    const popText = document.getElementById("popText");
+    const rotateMsg = document.getElementById("rotateMsg");
+
+    const W = canvas.width, H = canvas.height;
+
+    // =========================
+    // SOUND (beeps + 8-bit background music)
+    // =========================
+    let volume = 0.70;
+    const audio = { ctx:null, musicMaster:null, musicRunning:false, step:0, timer:null };
+
+    function ensureAudio(){
+      if(audio.ctx) return;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if(!AudioCtx) return;
+
+      audio.ctx = new AudioCtx();
+      audio.musicMaster = audio.ctx.createGain();
+      audio.musicMaster.gain.value = Math.max(0.0001, volume * 0.06);
+      audio.musicMaster.connect(audio.ctx.destination);
+    }
+
+    function hzFromMidi(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+
+    function beep(freq=440, dur=0.04){
+      if(volume <= 0) return;
+      ensureAudio();
+      if(!audio.ctx) return;
+
+      const t = audio.ctx.currentTime;
+      const o = audio.ctx.createOscillator();
+      const gain = audio.ctx.createGain();
+      o.type = "square";
+      o.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(Math.max(0.0001, volume * 0.08), t);
+      o.connect(gain);
+      gain.connect(audio.ctx.destination);
+      o.start(t);
+      o.stop(t + dur);
+    }
+
+    function playMusicNote(freq, dur, amp=0.22){
+      if(!audio.musicRunning || !audio.ctx || !audio.musicMaster) return;
+      const t = audio.ctx.currentTime;
+      const o = audio.ctx.createOscillator();
+      const eg = audio.ctx.createGain();
+      o.type = "square";
+      o.frequency.setValueAtTime(freq, t);
+      eg.gain.setValueAtTime(0.0001, t);
+      eg.gain.linearRampToValueAtTime(amp, t + 0.01);
+      eg.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(eg);
+      eg.connect(audio.musicMaster);
+      o.start(t);
+      o.stop(t + dur + 0.02);
+    }
+
+    function startMusic(){
+      ensureAudio();
+      if(!audio.ctx || audio.musicRunning) return;
+
+      audio.musicRunning = true;
+      audio.step = 0;
+
+      const bass = [36,36,43,43,41,41,38,38, 36,36,43,43,41,41,38,38];
+      const lead = [60,62,64,67, 64,62,60,62, 64,67,69,67, 64,62,60,57];
+      const sparkle = [72, null, 74, null, 76, null, 79, null, 76, null, 74, null, 72, null, 69, null];
+
+      const stepMs = 120;
+      audio.timer = setInterval(() => {
+        if(audio.musicMaster) audio.musicMaster.gain.value = Math.max(0.0001, volume * 0.06);
+        const i = audio.step % lead.length;
+        if((audio.step % 2) === 0) playMusicNote(hzFromMidi(bass[i]), 0.14, 0.18);
+        playMusicNote(hzFromMidi(lead[i]), 0.10, 0.14);
+        const s = sparkle[audio.step % sparkle.length];
+        if(s != null && (audio.step % 4 === 0)) playMusicNote(hzFromMidi(s), 0.06, 0.08);
+        audio.step++;
+      }, stepMs);
+    }
+
+    window.addEventListener("pointerdown", startMusic, {once:false});
+    window.addEventListener("keydown", startMusic, {once:false});
+
+    vol.addEventListener("input", () => {
+      volume = Number(vol.value) / 100;
+      volLabel.textContent = Math.round(volume * 100) + "%";
+      beep(660, 0.03);
+    });
+
+    // =========================
+    // FULLSCREEN BUTTON
+    // =========================
+    function updateFsLabel(){
+      fsBtn.textContent = document.fullscreenElement ? "EXIT FULLSCREEN" : "FULLSCREEN";
+    }
+    async function toggleFullscreen(){
+      try{
+        if(!document.fullscreenElement){
+          await document.documentElement.requestFullscreen?.();
+        } else {
+          await document.exitFullscreen?.();
+        }
+      } catch(e){}
+      updateFsLabel();
+      beep(520, 0.03);
+    }
+    fsBtn.onclick = toggleFullscreen;
+    document.addEventListener("fullscreenchange", updateFsLabel);
+    updateFsLabel();
+
+    // =========================
+    // MOBILE ROTATE MESSAGE
+    // =========================
+    const isTouchDevice = matchMedia("(pointer: coarse) and (hover: none)").matches;
+    function updateRotateOverlay(){
+      if(!isTouchDevice){ rotateMsg.style.display = "none"; return; }
+      const portrait = window.innerHeight > window.innerWidth;
+      rotateMsg.style.display = portrait ? "flex" : "none";
+    }
+    window.addEventListener("resize", updateRotateOverlay);
+    window.addEventListener("orientationchange", updateRotateOverlay);
+    updateRotateOverlay();
+
+    // =========================
+    // MOBILE DUAL JOYSTICKS
+    // =========================
+    function makeJoystick(el){
+      const knob = el.querySelector(".joyKnob");
+      const state = { active:false, id:null, dx:0, dy:0, cx:0, cy:0, r:0 };
+
+      function recalc(){
+        const rect = el.getBoundingClientRect();
+        state.cx = rect.left + rect.width/2;
+        state.cy = rect.top + rect.height/2;
+        state.r = Math.min(rect.width, rect.height) * 0.38;
+      }
+      function setKnob(px, py){
+        knob.style.transform = `translate(calc(-50% + ${px}px), calc(-50% + ${py}px))`;
+      }
+      function setFromPoint(clientX, clientY){
+        const vx = clientX - state.cx;
+        const vy = clientY - state.cy;
+        const len = Math.hypot(vx, vy) || 1;
+        const clamped = Math.min(len, state.r);
+        const nx = (vx / len) * clamped;
+        const ny = (vy / len) * clamped;
+        state.dx = nx / state.r;
+        state.dy = ny / state.r;
+        setKnob(nx, ny);
+      }
+      function reset(){
+        state.active = false; state.id = null;
+        state.dx = 0; state.dy = 0;
+        setKnob(0,0);
+      }
+
+      el.addEventListener("pointerdown", (e)=>{
+        if(!isTouchDevice) return;
+        recalc();
+        state.active = true;
+        state.id = e.pointerId;
+        el.setPointerCapture(e.pointerId);
+        setFromPoint(e.clientX, e.clientY);
+        e.preventDefault();
+      }, {passive:false});
+
+      el.addEventListener("pointermove", (e)=>{
+        if(!state.active || e.pointerId !== state.id) return;
+        setFromPoint(e.clientX, e.clientY);
+        e.preventDefault();
+      }, {passive:false});
+
+      el.addEventListener("pointerup", (e)=>{
+        if(e.pointerId !== state.id) return;
+        reset();
+        e.preventDefault();
+      }, {passive:false});
+
+      el.addEventListener("pointercancel", (e)=>{
+        if(e.pointerId !== state.id) return;
+        reset();
+      });
+
+      window.addEventListener("resize", ()=>{ if(state.active) recalc(); });
+      return state;
+    }
+
+    const joy1 = makeJoystick(document.getElementById("joy1"));
+    const joy2 = makeJoystick(document.getElementById("joy2"));
+
+    // =========================
+    // ONLY ONE MAP (OG map)
+    // =========================
+    const obs = [
+      {x:160,y:160,w:280,h:20},{x:520,y:160,w:120,h:20},
+      {x:160,y:620,w:120,h:20},{x:360,y:620,w:280,h:20},
+      {x:160,y:160,w:20,h:220},{x:160,y:460,w:20,h:180},
+      {x:620,y:160,w:20,h:180},{x:620,y:460,w:20,h:180},
+      {x:360,y:260,w:30,h:30},{x:430,y:260,w:30,h:30},
+      {x:360,y:510,w:30,h:30},{x:430,y:510,w:30,h:30},
+      {x:90,y:280,w:60,h:20},{x:90,y:500,w:60,h:20},
+      {x:650,y:280,w:60,h:20},{x:650,y:500,w:60,h:20},
+    ];
+
+    function rectsIntersect(a,b){
+      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+    }
+    function rectIntersectsAny(r){
+      for(const o of obs) if(rectsIntersect(r, o)) return true;
+      return false;
+    }
+
+    // =========================
+    // MOVEMENT (WITH WALL BOUNCES)
+    // =========================
+    function tryMove(x, y, dx, dy, size){
+      let nx = x, ny = y;
+      let hitWall = false;
+
+      // X move + obstacle slide
+      nx += dx;
+      const testX = {x:nx, y:y, w:size, h:size};
+      if(rectIntersectsAny(testX)) nx = x;
+
+      // Wall bounce X
+      if(nx < 0){
+        hitWall = true;
+        nx = 0 + WALL_PUSH;
+        nx += (-dx) * WALL_BOUNCE;
+      } else if(nx > W - size){
+        hitWall = true;
+        nx = (W - size) - WALL_PUSH;
+        nx += (-dx) * WALL_BOUNCE;
+      }
+
+      // Y move + obstacle slide
+      ny += dy;
+      const testY = {x:nx, y:ny, w:size, h:size};
+      if(rectIntersectsAny(testY)) ny = y;
+
+      // Wall bounce Y
+      if(ny < 0){
+        hitWall = true;
+        ny = 0 + WALL_PUSH;
+        ny += (-dy) * WALL_BOUNCE;
+      } else if(ny > H - size){
+        hitWall = true;
+        ny = (H - size) - WALL_PUSH;
+        ny += (-dy) * WALL_BOUNCE;
+      }
+
+      // Safety clamp
+      nx = Math.max(0, Math.min(W - size, nx));
+      ny = Math.max(0, Math.min(H - size, ny));
+
+      return {x:nx, y:ny, hitWall};
+    }
+
+    function slideMove(p, dx, dy, size){
+      const nxt = tryMove(p.x, p.y, dx, dy, size);
+      p.x = nxt.x;
+      p.y = nxt.y;
+
+      // optional: tiny wall tick sound (disabled by default)
+      // if(nxt.hitWall) beep(300, 0.01);
+    }
+
+    function glowRect(x, y, w, h){
+      g.save();
+      g.shadowBlur = 22;
+      g.shadowColor = "rgba(0,180,255,0.55)";
+      g.fillStyle = "rgba(0,180,255,0.35)";
+      g.fillRect(x, y, w, h);
+
+      g.shadowBlur = 0;
+      g.fillStyle = "rgb(0,180,255)";
+      g.fillRect(x+1, y+1, w-2, h-2);
+
+      g.strokeStyle = "rgba(255,255,255,0.9)";
+      g.lineWidth = 2;
+      g.strokeRect(x+0.5, y+0.5, w-1, h-1);
+
+      g.strokeStyle = "rgba(255,212,0,0.5)";
+      g.lineWidth = 1;
+      g.strokeRect(x+1.5, y+1.5, w-3, h-3);
+      g.restore();
+    }
+
+    // =========================
+    // GAME STATE
+    // =========================
+    const base = 20;
+    const big  = base + 10;
+
+    const p1 = { x:30,  y:30,  score:0 };
+    const p2 = { x:740, y:740, score:0 };
+
+    let count = 0;
+    const ROUND_TICKS = 1000; // 20s @ 50fps
+    let roundTicks = ROUND_TICKS;
+
+    const SPEED = 8;
+    const TAG_SPEED = SPEED + 1;
+
+    // WALL BOUNCE SETTINGS (added)
+    const WALL_BOUNCE = 0.85; // 1.0 = perfect bounce
+    const WALL_PUSH   = 0.001; // prevents sticking on edge
+
+    const TAG_REACH = 4;
+    const WIN_POINTS = 10;
+
+    let running = false;
+    let shakeTicks = 0;
+
+    let mode = "classic";
+    let lrPhase = 0;
+    let lrP1Time = 0;
+    let lrP2Time = 0;
+
+    let countdownTicks = 0;
+    let countdownBeepGate = -1;
+    let flashAlpha = 0;
+    let popTicks = 0;
+    let popScale = 1;
+
+    const keys = new Set();
+    window.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape"){ openMenu(); }
+      keys.add(e.key.toLowerCase());
+      if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(e.key.toLowerCase())) e.preventDefault();
+    }, {passive:false});
+    window.addEventListener("keyup", (e)=> keys.delete(e.key.toLowerCase()));
+
+    function isP1Tagger(){ return (count % 2 === 1); }
+    function sizeForP1(){ return isP1Tagger() ? big : base; }
+    function sizeForP2(){ return isP1Tagger() ? base : big; }
+    function forceRoles(p1Tagger){ count = p1Tagger ? 1 : 0; }
+
+    const tips = [
+      "Tip: Cut corners and use the middle blocks to juke.",
+      "Tip: Don’t run straight to the border—use pillars to reset distance.",
+      "Tip: Fake a direction change at the small squares—people over-commit.",
+      "Tip: If you get boxed, slide along obstacles instead of stopping.",
+      "Tip: Longest Run: each player gets ONE runner turn—make it count."
+    ];
+    function loadTip(){ tipBox.textContent = tips[Math.floor(Math.random()*tips.length)]; }
+
+    function updateModeUI(){
+      modeLabel.textContent = (modeSel.value === "classic") ? "Classic" : "Longest Run";
+      if(modeSel.value === "classic"){
+        modeDesc.innerHTML = `Classic: Survive <b>20 seconds</b> as runner to score.<br/><b>First to 10</b> wins → back to menu.`;
+      } else {
+        modeDesc.innerHTML = `Longest Run: Two rounds total.<br/>Each player gets <b>one</b> runner turn. Highest time wins.`;
+      }
+    }
+    modeSel.addEventListener("change", ()=>{ updateModeUI(); beep(520, 0.03); });
+    updateModeUI();
+
+    function openMenu(){
+      running = false;
+      menu.style.display = "flex";
+      loadTip();
+      lrPhase = 0; lrP1Time = 0; lrP2Time = 0;
+      countText.style.display = "none";
+      popText.style.display = "none";
+      beep(440, 0.03); setTimeout(()=>beep(660, 0.03), 70);
+    }
+
+    function startCountdown(){
+      countdownTicks = 3*50 + 25;
+      countdownBeepGate = -1;
+      countText.style.display = "block";
+    }
+
+    function resetRound(swapRoles=true){
+      p1.x = 30;  p1.y = 30;
+      p2.x = 740; p2.y = 740;
+      if(swapRoles) count++;
+      roundTicks = ROUND_TICKS;
+      startCountdown();
+    }
+
+    function startClassic(){
+      mode = "classic";
+      p1.score = 0; p2.score = 0;
+      count = 0;
+      resetRound(false);
+    }
+
+    function startLongest(){
+      mode = "longest";
+      p1.score = 0; p2.score = 0;
+      lrPhase = 1;
+      lrP1Time = 0;
+      lrP2Time = 0;
+      forceRoles(false);
+      resetRound(false);
+    }
+
+    function endClassicToMenu(){
+      const winner = (p1.score > p2.score) ? "P1" : "P2";
+      openMenu();
+      tipBox.textContent = `🏆 ${winner} WINS! Final Score — P1: ${p1.score} | P2: ${p2.score}`;
+      beep(660, 0.05); setTimeout(()=>beep(880, 0.05), 70);
+    }
+
+    function endLongestToMenu(){
+      const p1Sec = (lrP1Time/50).toFixed(2);
+      const p2Sec = (lrP2Time/50).toFixed(2);
+      let msg = "";
+      if(lrP1Time > lrP2Time) msg = `P1 WINS!  P1: ${p1Sec}s  |  P2: ${p2Sec}s`;
+      else if(lrP2Time > lrP1Time) msg = `P2 WINS!  P1: ${p1Sec}s  |  P2: ${p2Sec}s`;
+      else msg = `TIE!  P1: ${p1Sec}s  |  P2: ${p2Sec}s`;
+      openMenu();
+      tipBox.textContent = "🏁 Longest Run Results: " + msg;
+      beep(660, 0.05); setTimeout(()=>beep(880, 0.05), 70);
+    }
+
+    function startGame(){
+      startMusic();
+      running = true;
+      menu.style.display = "none";
+      if(modeSel.value === "classic") startClassic();
+      else startLongest();
+      beep(880, 0.04);
+      updateRotateOverlay();
+    }
+    playBtn.onclick = startGame;
+
+    resetScoreBtn.onclick = ()=>{
+      p1.score = 0; p2.score = 0;
+      lrP1Time = 0; lrP2Time = 0; lrPhase = 0;
+      beep(330, 0.04); setTimeout(()=>beep(220, 0.04), 60);
+      tipBox.textContent = "Scores reset.";
+    };
+
+    function step(){ update(); draw(); requestAnimationFrame(step); }
+
+    function hitFX(text){
+      flashAlpha = 0.55;
+      popTicks = 34;
+      popScale = 1.25;
+      popText.textContent = text;
+      popText.style.display = "block";
+    }
+
+    function updateCountdownUI(){
+      if(countdownTicks <= 0){
+        countText.style.display = "none";
+        return;
+      }
+      const num = Math.ceil(countdownTicks / 50);
+      let label = "";
+      if(num >= 3) label = "3";
+      else if(num === 2) label = "2";
+      else if(num === 1) label = "1";
+      else label = "GO!";
+      countText.textContent = label;
+
+      const gate = (label === "GO!") ? 0 : Number(label);
+      if(gate !== countdownBeepGate){
+        countdownBeepGate = gate;
+        if(label === "GO!") beep(880, 0.06);
+        else beep(520 + (gate*60), 0.05);
+      }
+    }
+
+    function clampVec(dx, dy, max){
+      const len = Math.hypot(dx, dy);
+      if(len > max && len > 0.0001){
+        const s = max / len;
+        return {dx: dx*s, dy: dy*s};
+      }
+      return {dx, dy};
+    }
+
+    function update(){
+      if(!running) return;
+
+      flashAlpha = Math.max(0, flashAlpha - 0.04);
+      if(popTicks > 0){
+        popTicks--;
+        popScale = 1 + (popTicks/34)*0.25;
+        popText.style.transform = `translate(-50%,-50%) scale(${popScale})`;
+        popText.style.opacity = Math.min(1, popTicks/10 + 0.2);
+      } else {
+        popText.style.display = "none";
+      }
+
+      if(countdownTicks > 0){
+        countdownTicks--;
+        updateCountdownUI();
+        return;
+      }
+
+      const p1Tag = isP1Tagger();
+      const p1Size = sizeForP1();
+      const p2Size = sizeForP2();
+
+      const p1Speed = p1Tag ? TAG_SPEED : SPEED;
+      const p2Speed = p1Tag ? SPEED : TAG_SPEED;
+
+      let p1dx = 0, p1dy = 0;
+      if(keys.has("w")) p1dy -= p1Speed;
+      if(keys.has("s")) p1dy += p1Speed;
+      if(keys.has("a")) p1dx -= p1Speed;
+      if(keys.has("d")) p1dx += p1Speed;
+
+      let p2dx = 0, p2dy = 0;
+      if(keys.has("arrowup")) p2dy -= p2Speed;
+      if(keys.has("arrowdown")) p2dy += p2Speed;
+      if(keys.has("arrowleft")) p2dx -= p2Speed;
+      if(keys.has("arrowright")) p2dx += p2Speed;
+
+      const DZ = 0.18;
+      if(isTouchDevice){
+        if(joy1.active){
+          const ax = Math.abs(joy1.dx) < DZ ? 0 : joy1.dx;
+          const ay = Math.abs(joy1.dy) < DZ ? 0 : joy1.dy;
+          p1dx += ax * p1Speed;
+          p1dy += ay * p1Speed;
+        }
+        if(joy2.active){
+          const ax = Math.abs(joy2.dx) < DZ ? 0 : joy2.dx;
+          const ay = Math.abs(joy2.dy) < DZ ? 0 : joy2.dy;
+          p2dx += ax * p2Speed;
+          p2dy += ay * p2Speed;
+        }
+      }
+
+      const p1v = clampVec(p1dx, p1dy, p1Speed);
+      const p2v = clampVec(p2dx, p2dy, p2Speed);
+
+      slideMove(p1, p1v.dx, p1v.dy, p1Size);
+      slideMove(p2, p2v.dx, p2v.dy, p2Size);
+
+      if(roundTicks > 0) roundTicks--;
+
+      let hb1 = {x:p1.x, y:p1.y, w:p1Size, h:p1Size};
+      let hb2 = {x:p2.x, y:p2.y, w:p2Size, h:p2Size};
+
+      const TAG_REACH = 4;
+      if(p1Tag){
+        hb1 = {x:hb1.x - TAG_REACH, y:hb1.y - TAG_REACH, w:hb1.w + TAG_REACH*2, h:hb1.h + TAG_REACH*2};
+      } else {
+        hb2 = {x:hb2.x - TAG_REACH, y:hb2.y - TAG_REACH, w:hb2.w + TAG_REACH*2, h:hb2.h + TAG_REACH*2};
+      }
+
+      const tagged = rectsIntersect(hb1, hb2);
+
+      if(mode === "classic"){
+        if(tagged){
+          if(p1Tag) p1.score++; else p2.score++;
+          shakeTicks = 14;
+          hitFX("TAG!");
+          beep(220, 0.05); setTimeout(()=>beep(110, 0.06), 70);
+
+          if(p1.score >= WIN_POINTS || p2.score >= WIN_POINTS){
+            endClassicToMenu();
+            return;
+          }
+          resetRound(true);
+        } else if(roundTicks <= 0){
+          if(p1Tag) p2.score++; else p1.score++;
+          shakeTicks = 10;
+          hitFX("TIME!");
+          beep(660, 0.04); setTimeout(()=>beep(880, 0.04), 60);
+
+          if(p1.score >= WIN_POINTS || p2.score >= WIN_POINTS){
+            endClassicToMenu();
+            return;
+          }
+          resetRound(true);
+        }
+      } else {
+        const p1Runner = !p1Tag;
+        const p2Runner = p1Tag;
+
+        if(lrPhase === 1 && p1Runner) lrP1Time++;
+        if(lrPhase === 2 && p2Runner) lrP2Time++;
+
+        if(tagged || roundTicks <= 0){
+          shakeTicks = 14;
+          hitFX(tagged ? "TAG!" : "TIME!");
+          beep(220, 0.05); setTimeout(()=>beep(110, 0.06), 70);
+
+          if(lrPhase === 1){
+            lrPhase = 2;
+            forceRoles(true);
+            resetRound(false);
+          } else if(lrPhase === 2){
+            lrPhase = 3;
+            endLongestToMenu();
+          }
+        }
+      }
+    }
+
+    function draw(){
+      let sx = 0, sy = 0;
+      if(shakeTicks > 0){
+        shakeTicks--;
+        sx = (Math.random()*8 - 4);
+        sy = (Math.random()*8 - 4);
+      }
+
+      g.setTransform(1,0,0,1,0,0);
+      g.clearRect(0,0,W,H);
+      g.setTransform(1,0,0,1,sx,sy);
+
+      g.strokeStyle = "rgb(25,25,25)";
+      for(let x=0;x<W;x+=40){ g.beginPath(); g.moveTo(x,0); g.lineTo(x,H); g.stroke(); }
+      for(let y=0;y<H;y+=40){ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); }
+
+      for(const r of obs) glowRect(r.x, r.y, r.w, r.h);
+
+      const p1Tag = isP1Tagger();
+      const p1Size = sizeForP1();
+      const p2Size = sizeForP2();
+
+      g.fillStyle = p1Tag ? "red" : "white";
+      g.fillRect(p1.x, p1.y, p1Size, p1Size);
+
+      g.fillStyle = p1Tag ? "white" : "red";
+      g.fillRect(p2.x, p2.y, p2Size, p2Size);
+
+      g.strokeStyle = "#ffd400";
+      g.strokeRect(0.5,0.5,W-1,H-1);
+
+      const secondsLeft = Math.ceil(roundTicks / 50);
+
+      g.fillStyle = "white";
+      g.font = "16px system-ui, Arial";
+
+      if(mode === "classic"){
+        g.fillText(`P1: ${p1.score}`, 14, 22);
+        g.fillText(`TIME: ${secondsLeft}`, (W/2)-34, 22);
+        g.fillText(`P2: ${p2.score}`, W-70, 22);
+        g.font = "13px system-ui, Arial";
+        g.fillText(`Classic • First to ${WIN_POINTS}`, (W/2)-70, 44);
+      } else {
+        const p1Sec = (lrP1Time/50).toFixed(2);
+        const p2Sec = (lrP2Time/50).toFixed(2);
+        g.fillText(`TIME: ${secondsLeft}`, (W/2)-34, 22);
+        g.font = "13px system-ui, Arial";
+        g.fillText(`Longest Run`, (W/2)-40, 44);
+        g.fillText(`P1 best: ${p1Sec}s`, 14, 22);
+        g.fillText(`P2 best: ${p2Sec}s`, W-120, 22);
+        g.fillText(`Round: ${Math.min(lrPhase,2)}/2`, (W/2)-30, 62);
+      }
+
+      g.font = "14px system-ui, Arial";
+      g.fillText(p1Tag ? "TAGGER" : "RUNNER", 14, 44);
+      g.fillText(p1Tag ? "RUNNER" : "TAGGER", W-82, 44);
+
+      g.font = "12px system-ui, Arial";
+      g.fillText(`2PlayerTag  |  Dev: Mcant  |  Esc = Menu`, 14, H-12);
+
+      if(flashAlpha > 0){
+        g.save();
+        g.setTransform(1,0,0,1,0,0);
+        g.fillStyle = `rgba(255,255,255,${flashAlpha})`;
+        g.fillRect(0,0,W,H);
+        g.restore();
+      }
+    }
+
+    openMenu();
+    requestAnimationFrame(step);
+  </script>
+</body>
+</html>
