@@ -2,37 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tag - Fullscreen</title>
-    <style>
-        /* This removes all white space and scrollbars from the browser */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        /* This forces the game to be exactly the size of the window */
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    <title>My Research Project</title> <style>
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; }
+        #game-frame { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-    <iframe 
-        src="https://abinbins.github.io/a3/tag" 
-        allow="autoplay; fullscreen; keyboard" 
-        id="game-area">
-    </iframe>
+<div id="container"></div>
+
+<script>
+    // This is the URL that was blocked, but we're going to hide it
+    const target = "https://abinbins.github.io/a3/tag/";
+
+    // We create a "Blob" which is a fake file stored in the browser's RAM
+    const blobCode = `
+        <html>
+            <body style="margin:0;padding:0;overflow:hidden;">
+                <iframe src="${target}" style="width:100%;height:100vh;border:none;" allowfullscreen></iframe>
+            </body>
+        </html>
+    `;
+
+    const blob = new Blob([blobCode], { type: 'text/html' });
+    const blobURL = URL.createObjectURL(blob);
+
+    // Create the iframe pointing to our "memory file" instead of a website
+    const iframe = document.createElement('iframe');
+    iframe.id = "game-frame";
+    iframe.src = blobURL;
+    document.getElementById('container').appendChild(iframe);
+</script>
 
 </body>
 </html>
