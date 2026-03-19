@@ -5,15 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big NEON Tower vs Tiny Square</title>
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; img-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net;">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icestyle.css" type="text/css">
-    
     <style>
         body { background-color: #000; margin: 0; overflow: hidden; }
-        /* Hides any accidental ad-containers left in the HTML */
-        #ads, .ad-unit, .adsbygoogle, #poki-sdk-container { display: none !important; visibility: hidden !important; }
+        #ads, .ad-unit, #poki-sdk-container { display: none !important; }
     </style>
+
+    <script>
+        // FAKE AD SIGNAL (Mocking the SDK)
+        // This tells the game "Ads are finished" before they even try to load
+        window.adConfig = function(o) { return; };
+        window.PokiSDK = {
+            init: function() { return Promise.resolve(); },
+            ads: {
+                breakCheck: function() { return Promise.resolve(); },
+                adFinished: function() { return true; }
+            },
+            setDebug: function() { return; },
+            gameLoadingStart: function() { return; },
+            gameLoadingFinished: function() { return; }
+        };
+
+        // Mocking Google Tag Manager to prevent errors
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    </script>
 </head>
 <body>
     <div id="fb-root"></div>
@@ -23,11 +39,5 @@
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/office.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/mainice.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/regisice.js" type="module"></script>
-
-    <noscript>
-        <div style="color: white; text-align: center; margin-top: 20%;">
-            <h2>JavaScript is required to play.</h2>
-        </div>
-    </noscript>
 </body>
 </html>
