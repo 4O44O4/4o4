@@ -16,6 +16,7 @@
             --border: #333;
             --input-bg: #000;
             --panic: #ff4444;
+            --test-color: #3498db;
         }
 
         [data-theme="light"] {
@@ -27,11 +28,11 @@
             --border: #ddd;
             --input-bg: #fff;
             --panic: #cc0000;
+            --test-color: #2980b9;
         }
 
         * { box-sizing: border-box; }
         
-        /* Stop all scrolling on the main body */
         body, html { 
             margin: 0; 
             padding: 0; 
@@ -90,7 +91,6 @@
             outline: none; 
         }
         
-        /* Buttons */
         .fs-toggle-btn { 
             background: var(--accent); 
             color: white; 
@@ -112,7 +112,6 @@
             font-weight: bold;
         }
 
-        /* Content Areas */
         #content-area, #settings-area { 
             flex-grow: 1; 
             overflow-y: auto; 
@@ -149,11 +148,11 @@
         #player-container { display: none; flex-grow: 1; background: black; height: calc(100vh - 60px); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Config Styling */
         .config-box { padding: 12px; background: var(--card); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; }
         .config-input { width: 100%; padding: 8px; margin-bottom: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-size: 11px; outline: none; }
         .config-save-btn { width: 100%; padding: 8px; background: var(--accent); border: none; color: white; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
-        .preset-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+        
+        .preset-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
         .preset-btn { width: 100%; aspect-ratio: 1; border: 1px solid var(--border); background: var(--input-bg); border-radius: 6px; padding: 5px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .preset-btn img { width: 24px; height: 24px; object-fit: contain; }
         .circle-icon { border-radius: 50%; }
@@ -207,6 +206,9 @@
                         </div>
                         <div class="preset-btn" title="Google Slides" onclick="setPreset('Google Slides', 'https://ssl.gstatic.com/docs/presentations/images/favicon-5.ico')">
                             <img src="https://ssl.gstatic.com/docs/presentations/images/favicon-5.ico">
+                        </div>
+                        <div class="preset-btn" title="Big Neon Tower" onclick="setPreset('Big NEON Tower', 'https://www.coolmathgames.com/0-big-neon-tower-tiny-square/favicon.ico')">
+                            <img src="https://www.coolmathgames.com/0-big-neon-tower-tiny-square/favicon.ico" class="circle-icon">
                         </div>
                     </div>
                 </div>
@@ -339,7 +341,18 @@
             gameList.filter(g => g.name.toLowerCase().includes(term)).forEach(g => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
-                card.innerText = g.name;
+                
+                if (g.name.includes("(TEST)")) {
+                    card.style.borderColor = "var(--test-color)";
+                    card.style.boxShadow = "0 0 10px rgba(52, 152, 219, 0.1)";
+                    card.innerHTML = `<div style="display:flex; flex-direction:column; gap:5px;">
+                                        <span>${g.name.replace("(TEST)", "")}</span>
+                                        <span style="font-size:9px; color:var(--test-color); text-transform:uppercase; letter-spacing:1px;">Development</span>
+                                      </div>`;
+                } else {
+                    card.innerText = g.name;
+                }
+                
                 card.onclick = () => launchGame(g.path);
                 grid.appendChild(card);
             });
@@ -350,6 +363,7 @@
             const target = current === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', target);
             localStorage.setItem('jettTheme', target);
+            renderGames(); // Re-render to update text colors
         }
 
         function loadTheme() {
