@@ -16,7 +16,6 @@
             --border: #333;
             --input-bg: #000;
             --panic: #ff4444;
-            --test-color: #3498db;
         }
 
         [data-theme="light"] {
@@ -28,7 +27,6 @@
             --border: #ddd;
             --input-bg: #fff;
             --panic: #cc0000;
-            --test-color: #2980b9;
         }
 
         * { box-sizing: border-box; }
@@ -226,7 +224,7 @@
         </div>
 
         <div id="player-container">
-            <iframe id="game-view" src="" allow="autoplay; fullscreen; keyboard"></iframe>
+            <iframe id="game-view" src="" allow="autoplay; fullscreen; keyboard" sandbox="allow-forms allow-scripts allow-same-origin allow-popups-to-escape-sandbox allow-pointer-lock"></iframe>
         </div>
     </div>
 
@@ -272,11 +270,16 @@
 
         let typedBuffer = "";
         const panicWord = "PANIC";
+        let isPanicMode = false;
 
         const defaults = {
             title: "My Apps",
             icon: "https://clouddrivecdn.classlink.com/BuildingLogo/4196/1600693840734-c170760b49d09e194fb38e7922c2e2f2.png",
             panic: "https://classroom.google.com"
+        };
+
+        window.onbeforeunload = function() {
+            if (!isPanicMode) return "Are you sure you want to leave Project 404?";
         };
 
         function showTab(tab) {
@@ -321,6 +324,7 @@
         }
 
         function panic() { 
+            isPanicMode = true;
             const saved = localStorage.getItem('jettSettings');
             const data = saved ? JSON.parse(saved) : defaults;
             window.top.location.replace(data.panic.startsWith('http') ? data.panic : 'https://' + data.panic);
@@ -328,27 +332,34 @@
 
         document.addEventListener('keydown', (e) => { 
             typedBuffer += e.key.toUpperCase();
-            if (typedBuffer.endsWith(panicWord)) {
-                panic();
-            }
+            if (typedBuffer.endsWith(panicWord)) panic();
             if (typedBuffer.length > 10) typedBuffer = typedBuffer.slice(-5);
         });
 
         function renderGames() {
             const grid = document.getElementById('game-grid');
             const term = document.getElementById('search').value.toLowerCase();
+            const currentTheme = document.body.getAttribute('data-theme') || 'dark';
             grid.innerHTML = '';
+            
             gameList.filter(g => g.name.toLowerCase().includes(term)).forEach(g => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 
-                if (g.name.includes("(TEST)")) {
-                    card.style.borderColor = "var(--test-color)";
-                    card.style.boxShadow = "0 0 10px rgba(52, 152, 219, 0.1)";
-                    card.innerHTML = `<div style="display:flex; flex-direction:column; gap:5px;">
-                                        <span>${g.name.replace("(TEST)", "")}</span>
-                                        <span style="font-size:9px; color:var(--test-color); text-transform:uppercase; letter-spacing:1px;">Development</span>
-                                      </div>`;
+                if (g.name.toUpperCase().includes("(TEST)")) {
+                    // Hide the (TEST) text
+                    card.innerText = g.name.replace(/\(TEST\)/gi, "").trim();
+                    
+                    // Flip the color based on current theme
+                    if (currentTheme === 'dark') {
+                        card.style.background = "#ffffff";
+                        card.style.color = "#000000";
+                        card.style.borderColor = "#ffffff";
+                    } else {
+                        card.style.background = "#000000";
+                        card.style.color = "#ffffff";
+                        card.style.borderColor = "#000000";
+                    }
                 } else {
                     card.innerText = g.name;
                 }
@@ -363,7 +374,7 @@
             const target = current === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', target);
             localStorage.setItem('jettTheme', target);
-            renderGames(); // Re-render to update text colors
+            renderGames(); 
         }
 
         function loadTheme() {
@@ -400,10 +411,10 @@
         }
 
         function init() {
+            loadTheme();
             renderGames();
             applySettings();
             loadRecords();
-            loadTheme();
             
             const saved = localStorage.getItem('jettSettings');
             const data = saved ? JSON.parse(saved) : defaults;
@@ -424,6 +435,7 @@
             Object.assign(iframe.style, { position: 'fixed', top: 0, bottom: 0, left: 0, right: 0, border: 'none', width: '100%', height: '100%' });
             iframe.src = url;
             doc.body.appendChild(iframe);
+            isPanicMode = true;
             window.location.replace("https://google.com");
         }
     </script>
