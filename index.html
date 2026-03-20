@@ -7,10 +7,14 @@
     <link id="tab-icon" rel="icon" href="https://github.githubassets.com/favicons/favicon.svg">
     
     <style>
+
+
         /* ========================================
-        CORE THEME ENGINE
-        ========================================
+           CORE THEME VARIABLES
+           ========================================
         */
+
+
         :root { 
             --bg: #0b0b0b; 
             --side: #121212; 
@@ -23,10 +27,13 @@
             --dev-tag: var(--accent);
         }
 
+
         /* ========================================
-        GATEKEEPER (GITHUB PAGES 404 LOOK)
-        ========================================
+           GATEKEEPER (GITHUB PAGES 404 LOOK)
+           ========================================
         */
+
+
         #gatekeeper {
             position: fixed; 
             top: 0; 
@@ -45,6 +52,7 @@
             text-align: center;
         }
 
+
         #gh-text { 
             font-size: 80px; 
             font-weight: 400; 
@@ -52,6 +60,7 @@
             user-select: none; 
             color: #000;
         }
+
 
         #gh-subtext { 
             color: #666; 
@@ -61,6 +70,7 @@
             margin-bottom: 20px;
         }
 
+
         #gh-desc {
             color: #6a737d;
             font-size: 16px;
@@ -69,15 +79,18 @@
             margin-bottom: 30px;
         }
 
+
         .gh-link {
             color: #0366d6;
             text-decoration: none;
             cursor: pointer;
         }
 
+
         .gh-link:hover {
             text-decoration: underline;
         }
+
 
         #gh-footer {
             margin-top: 40px;
@@ -88,15 +101,19 @@
             gap: 10px;
         }
 
+
         #gh-logo {
             margin-top: 50px;
             opacity: 0.3;
         }
 
+
         /* ========================================
-        RETRO OG LOOK & SCANLINES
-        ========================================
+           RETRO OG LOOK & SCANLINES
+           ========================================
         */
+
+
         [data-og-look="true"] {
             --bg: #000800 !important; 
             --side: #000500 !important; 
@@ -107,6 +124,7 @@
             --input-bg: #000 !important; 
             font-family: 'Courier New', monospace !important;
         }
+
 
         .scanlines {
             display: none; 
@@ -121,17 +139,22 @@
             z-index: 9999;
         }
 
+
         [data-og-look="true"] .scanlines { 
             display: block; 
         }
 
+
         /* ========================================
-        MAIN INTERFACE LAYOUT
-        ========================================
+           MAIN INTERFACE LAYOUT
+           ========================================
         */
+
+
         * { 
             box-sizing: border-box; 
         }
+
 
         body, html { 
             margin: 0; 
@@ -146,6 +169,7 @@
             transition: background 0.2s, color 0.2s; 
         }
 
+
         #sidebar { 
             width: 260px; 
             background: var(--side); 
@@ -156,6 +180,7 @@
             flex-shrink: 0; 
             height: 100%; 
         }
+
 
         .side-btn { 
             background: none; 
@@ -172,11 +197,13 @@
             transition: 0.2s; 
         }
 
+
         .side-btn:hover, .side-btn.active { 
             background: var(--border); 
             opacity: 1; 
             color: var(--accent); 
         }
+
 
         #main { 
             display: flex; 
@@ -186,6 +213,7 @@
             position: relative; 
             overflow: hidden; 
         }
+
 
         #top-nav { 
             height: 60px; 
@@ -198,6 +226,7 @@
             flex-shrink: 0; 
         }
 
+
         #search { 
             flex-grow: 1; 
             background: var(--card); 
@@ -208,6 +237,7 @@
             outline: none; 
         }
 
+
         #content-area, #settings-area { 
             flex-grow: 1; 
             overflow-y: auto; 
@@ -215,11 +245,13 @@
             height: calc(100vh - 60px); 
         }
 
+
         #game-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
             gap: 20px; 
         }
+
 
         .game-card { 
             background: var(--card); 
@@ -238,11 +270,13 @@
             transition: all 0.2s ease-in-out; 
         }
 
+
         .game-card:hover { 
             border-color: var(--accent); 
             transform: translateY(-5px); 
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
+
 
         #player-container { 
             display: none; 
@@ -252,16 +286,20 @@
             position: relative; 
         }
 
+
         iframe { 
             width: 100%; 
             height: 100%; 
             border: none; 
         }
 
+
         /* ========================================
-        SETTINGS STYLING
-        ========================================
+           SETTINGS STYLING
+           ========================================
         */
+
+
         .config-box { 
             padding: 25px; 
             background: var(--card); 
@@ -269,6 +307,7 @@
             border: 1px solid var(--border); 
             margin-bottom: 25px; 
         }
+
 
         .config-input { 
             width: 100%; 
@@ -282,12 +321,14 @@
             outline: none; 
         }
 
+
         .preset-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             gap: 12px; 
             margin-top: 20px; 
         }
+
 
         .preset-btn { 
             width: 100%; 
@@ -303,15 +344,18 @@
             transition: 0.2s;
         }
 
+
         .preset-btn:hover {
             border-color: var(--accent);
         }
+
 
         .preset-btn img { 
             width: 36px; 
             height: 36px; 
             object-fit: contain; 
         }
+
 
         .switch { 
             position: relative; 
@@ -320,7 +364,9 @@
             height: 22px; 
         }
 
+
         .switch input { opacity: 0; width: 0; height: 0; }
+
 
         .slider { 
             position: absolute; 
@@ -330,6 +376,7 @@
             transition: .4s; 
             border-radius: 22px; 
         }
+
 
         .slider:before { 
             position: absolute; 
@@ -343,8 +390,10 @@
             border-radius: 50%; 
         }
 
+
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(22px); }
+
 
         .color-label { 
             font-size: 11px; 
@@ -357,7 +406,9 @@
     </style>
 </head>
 
+
 <body onload="init()">
+
 
     <div id="gatekeeper">
         <h1 id="gh-text">404</h1>
@@ -373,11 +424,13 @@
             <span onclick="failRedirect()" style="cursor:pointer">@githubstatus</span>
         </div>
 
+
         <div id="gh-logo">
             <svg height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
         </div>
     </div>
     <div class="scanlines"></div>
+
 
     <div id="sidebar">
         <h1 style="color:var(--accent); margin-left:10px; font-size:26px; margin-bottom:40px; font-weight: 800;">Project 404</h1>
@@ -385,10 +438,12 @@
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Home Library</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">System Settings</button>
 
+
         <div style="margin-top: auto; padding: 10px; opacity: 0.4; font-size: 10px; letter-spacing: 1px;">
             STATION 404 V2.1
         </div>
     </div>
+
 
     <div id="main">
         <div id="top-nav">
@@ -399,9 +454,11 @@
             <button class="side-btn" style="width: auto; background: var(--panic); color: white; opacity: 1; font-weight: bold;" onclick="panic()">PANIC</button>
         </div>
 
+
         <div id="content-area">
             <div id="game-grid"></div>
         </div>
+
 
         <div id="settings-area" style="display: none;">
             <div style="max-width: 650px; margin: 0 auto; padding-bottom: 60px;">
@@ -430,6 +487,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <div class="config-box">
                     <h2 style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1.5px;">Theme Configuration</h2>
@@ -464,6 +522,7 @@
                     </div>
                 </div>
 
+
                 <div class="config-box">
                     <h2 style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1.5px;">Data Records</h2>
                     <textarea id="records-input" class="config-input" style="height: 150px; resize: none; padding: 15px; line-height: 1.6;" placeholder="Store game progress, codes, or private notes here..." oninput="saveRecords()"></textarea>
@@ -471,25 +530,32 @@
             </div>
         </div>
 
+
         <div id="player-container">
             <iframe id="game-view" src="" allow="autoplay; fullscreen; keyboard" sandbox="allow-forms allow-scripts allow-same-origin allow-popups-to-escape-sandbox allow-pointer-lock"></iframe>
         </div>
     </div>
 
+
     <script>
+
+
         /* ========================================
-        CORE JAVASCRIPT LOGIC
-        ========================================
+           CORE JAVASCRIPT LOGIC
+           ========================================
         */
+
+
         let inputSeq = ""; 
         const combo = "404"; 
-        const trap = "https://4o44o4.github.io/4o4";
+        const trap = "https://4o44o4.github.io/abcabc.html"; // UPDATED TO YOUR FILE
         
         const defaults = { 
             title: "My Apps", 
             icon: "https://clouddrivecdn.classlink.com/BuildingLogo/4196/1600693840734-c170760b49d09e194fb38e7922c2e2f2.png", 
             panic: "https://classroom.google.com" 
         };
+
 
         const gameList = [
             {n: "Bloons TD", p: "./games/bloonstd/index.html"},
@@ -530,6 +596,7 @@
             {n: "Tube Jumpers (TEST)", p: "./games/TJ.html"}
         ];
 
+
         const themePresets = {
             dark: {bg:"#0b0b0b", side:"#121212", text:"#efefef", card:"#1e1e1e", border:"#333", accent:"#4CAF50"},
             neon: {bg:"#000", side:"#050505", text:"#fff", card:"#0a0a0a", border:"#ff00ff", accent:"#00ffff"},
@@ -538,7 +605,10 @@
             light: {bg:"#f0f2f5", side:"#ffffff", text:"#1a1a1a", card:"#ffffff", border:"#ddd", accent:"#000000"}
         };
 
+
         /* HANDLERS */
+
+
         window.addEventListener('keydown', (e) => { 
             if (document.getElementById('gatekeeper').style.display !== 'none') { 
                 if (e.key === combo[inputSeq.length]) { 
@@ -552,15 +622,18 @@
             } 
         });
 
+
         function unlock() { 
             document.getElementById('gatekeeper').style.display = 'none'; 
             sessionStorage.setItem('p404_unlocked', 'true'); 
             applySettings(); 
         }
 
+
         function failRedirect() { 
             window.location.replace(trap); 
         }
+
 
         function applyThemePreset(k) {
             document.body.setAttribute('data-theme', k); 
@@ -579,17 +652,20 @@
             renderGames();
         }
 
+
         function updateColor(p, v) { 
             document.documentElement.style.setProperty(p, v); 
             localStorage.setItem('p404_color_' + p, v); 
             if(p === '--accent') renderGames(); 
         }
 
+
         function toggleOGLook(e) { 
             document.body.setAttribute('data-og-look', e); 
             localStorage.setItem('p404_og_look', e); 
             renderGames(); 
         }
+
 
         function showTab(t) { 
             goHome(); 
@@ -599,11 +675,13 @@
             document.getElementById('nav-' + t).classList.add('active'); 
         }
 
+
         function setPreset(n, i) { 
             document.getElementById('cloak-name').value = n; 
             document.getElementById('cloak-url').value = i; 
             saveSettings(); 
         }
+
 
         function launchGame(p) { 
             document.getElementById('content-area').style.display = 'none'; 
@@ -613,6 +691,7 @@
             document.getElementById('game-view').src = p; 
         }
 
+
         function goHome() { 
             document.getElementById('game-view').src = ''; 
             document.getElementById('player-container').style.display = 'none'; 
@@ -620,10 +699,12 @@
             document.getElementById('content-area').style.display = 'block'; 
         }
 
+
         function panic() { 
             const s = JSON.parse(localStorage.getItem('jettSettings') || JSON.stringify(defaults)); 
             window.top.location.replace(s.panic.startsWith('http') ? s.panic : 'https://' + s.panic); 
         }
+
 
         function renderGames() {
             const grid = document.getElementById('game-grid'); 
@@ -647,6 +728,7 @@
             });
         }
 
+
         function saveSettings() { 
             const s = { 
                 title: document.getElementById('cloak-name').value || defaults.title, 
@@ -656,6 +738,7 @@
             localStorage.setItem('jettSettings', JSON.stringify(s)); 
             applySettings(); 
         }
+
 
         function applySettings() { 
             if (sessionStorage.getItem('p404_unlocked') !== 'true') return; 
@@ -668,9 +751,11 @@
             document.head.appendChild(l); 
         }
 
+
         function saveRecords() { 
             localStorage.setItem('p404_records', document.getElementById('records-input').value); 
         }
+
 
         function init() {
             const t = localStorage.getItem('jettTheme') || 'dark'; 
@@ -691,6 +776,7 @@
             }
         }
 
+
         function toggleFullScreen() { 
             const el = document.getElementById('game-view'); 
             if (el.requestFullscreen) {
@@ -701,6 +787,8 @@
                 el.msRequestFullscreen();
             }
         }
+
+
     </script>
 </body>
 </html>
