@@ -1,43 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tube Jumpers - Ad Free</title>
+    <title>Tube Jumpers | Project 404</title>
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net;">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; }
-        #game-container { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        ruffle-player { width: 100%; height: 100%; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background-color: #000; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        #player-container { width: 100vw; height: 100vh; }
+        ruffle-player { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <div id="player"></div>
-    </div>
+    <div id="player-container"></div>
 
-    <script src="https://cdn.jsdelivr.net/gh/ruffle-rs/ruffle@main/web/ruffle.js"></script>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     
     <script>
         window.RufflePlayer = window.RufflePlayer || {};
-        window.addEventListener("load", (event) => {
+        window.addEventListener("DOMContentLoaded", () => {
             const ruffle = window.RufflePlayer.newest();
             const player = ruffle.createPlayer();
-            const container = document.getElementById("player");
+            const container = document.getElementById("player-container");
             container.appendChild(player);
             
-            // This loads the original game file from a clean CDN
-            player.load("https://cdn.jsdelivr.net/gh/bubbls/ruffle@main/tube-jumpers.swf").then(() => {
-                console.log("Tube Jumpers loaded successfully");
+            // Loading Tube Jumpers from a high-uptime repository
+            player.load({
+                url: "https://raw.githubusercontent.com/skid-inc/flash-games/main/tube-jumpers.swf",
+                allowScriptAccess: true,
+            }).then(() => {
+                console.log("Tube Jumpers Ready");
             }).catch((e) => {
-                console.error("Failed to load game:", e);
+                console.error("Load Error:", e);
+                // Fallback link if the first one fails
+                player.load("https://cdn.jsdelivr.net/gh/688/files@main/tube-jumpers.swf");
             });
+        });
 
-            player.style.width = "100%";
-            player.style.height = "100%";
+        // --- PANIC INTEGRATION (Shift + 1) ---
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key === '1') {
+                window.top.location.href = "https://classroom.google.com";
+            }
         });
     </script>
 
