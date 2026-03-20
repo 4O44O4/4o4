@@ -1,76 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big NEON Tower vs Tiny Square</title>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Space Waves</title>
     <style>
-        body { background-color: #000; margin: 0; overflow: hidden; position: fixed; width: 100%; height: 100%; }
-        /* Layer 1: Hide any potential ad elements via CSS */
-        iframe, ins, [id*="ad"], [class*="ad-"], #gamemonetize-sdk, #poki-sdk-container { 
-            display: none !important; opacity: 0 !important; pointer-events: none !important; 
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
+        
+        #unity-container { width: 100%; height: 100%; position: relative; }
+        #unity-canvas { width: 100% !important; height: 100% !important; background: #000; }
+        
+        #loading-cover {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #111; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10;
+        }
+
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #333;
+            border-top: 5px solid #3498db; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #progress-bar {
+            width: 200px; height: 10px; background: #333;
+            border-radius: 5px; margin-top: 20px; overflow: hidden;
+        }
+
+        #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.2s; }
     </style>
-
-    <script>
-        // LAYER 2: INTERCEPT ALL NETWORK CALLS (The Global Kill-Switch)
-        const ALLOWED_DOMAINS = ['cdn.jsdelivr.net', 'bubbls.github.io'];
-
-        // Overwrite XMLHttpRequest (Old school ad calls)
-        const proxiedOpen = window.XMLHttpRequest.prototype.open;
-        window.XMLHttpRequest.prototype.open = function(method, url) {
-            if (typeof url === 'string' && !ALLOWED_DOMAINS.some(d => url.includes(d))) {
-                console.log('BLOCKED XHR:', url);
-                return; // Kill the request
-            }
-            return proxiedOpen.apply(this, arguments);
-        };
-
-        // Overwrite Fetch (Modern ad calls)
-        const originalFetch = window.fetch;
-        window.fetch = function(input, init) {
-            const url = typeof input === 'string' ? input : input.url;
-            if (typeof url === 'string' && !ALLOWED_DOMAINS.some(d => url.includes(d))) {
-                console.log('BLOCKED FETCH:', url);
-                return Promise.resolve(new Response('', { status: 200 }));
-            }
-            return originalFetch.apply(this, arguments);
-        };
-
-        // LAYER 3: DUMMY SDKs (The "Success Signal")
-        const silent = () => {};
-        const success = () => Promise.resolve();
-        
-        window.SDK_OPTIONS = { gameId: "none", onEvent: silent };
-        window.sdk = { 
-            showBanner: (callback) => { if(callback) callback(); }, 
-            init: success, 
-            resumeGame: success 
-        };
-        window.PokiSDK = { 
-            init: success, 
-            ads: { breakCheck: success, adFinished: () => true },
-            gameLoadingStart: silent, 
-            gameLoadingFinished: silent 
-        };
-        
-        // LAYER 4: PREVENT REDIRECTS (Stop the game from opening new tabs)
-        window.open = function() { return null; };
-
-        // LAYER 5: DOM WATCHDOG (Delete ads that try to inject via script)
-        setInterval(() => {
-            document.querySelectorAll('iframe, ins, #gamemonetize-sdk').forEach(el => el.remove());
-        }, 50);
-    </script>
 </head>
 <body>
-    <div id="fb-root"></div>
-    
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icewasm.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icecheck.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/office.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/mainice.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/regisice.js" type="module"></script>
+
+    <div id="unity-container">
+        <canvas id="unity-canvas" tabindex="-1"></canvas>
+        <div id="loading-cover">
+            <div class="spinner"></div>
+            <div id="progress-bar"><div id="progress-fill"></div></div>
+            <p style="color: #666; font-family: sans-serif; margin-top: 10px;">Loading Clean Version...</p>
+        </div>
+    </div>
+
+    <script>
+        // --- AD BLOCKER / NULLIFIER ---
+        // We override these functions before the game loads to prevent it from trying to show ads.
+        window.showInterstitialAd = function() { console.log("Ad Blocked"); return Promise.resolve(); };
+        window.showRewardedAd = function() { console.log("Ad Blocked"); return Promise.resolve(); };
+        window.loadAds = function() { console.log("Ad Loading Blocked"); };
+        window.$msstart = { loadAdsAsync: () => Promise.resolve(), showAdsAsync: () => Promise.resolve() };
+
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingCover = document.querySelector("#loading-cover");
+        const progressFill = document.querySelector("#progress-fill");
+
+        const buildUrl = "https://slope3.com/game/space-wave/Build";
+        const config = {
+            dataUrl: buildUrl + "/568ea6b3af616bd57f419c508c933303.data.unityweb",
+            frameworkUrl: buildUrl + "/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb",
+            codeUrl: buildUrl + "/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "do.Games",
+            productName: "Space Waves",
+            productVersion: "1.1.2-ms",
+        };
+
+        // Panic Hotkey
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key === '1') window.top.location.href = "https://classroom.google.com";
+        });
+
+        const script = document.createElement("script");
+        script.src = buildUrl + "/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js";
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                progressFill.style.width = (100 * progress) + "%";
+            }).then((unityInstance) => {
+                loadingCover.style.display = "none";
+                canvas.focus();
+            }).catch((message) => {
+                console.error(message);
+            });
+        };
+        document.body.appendChild(script);
+
+        window.addEventListener("mousedown", () => canvas.focus());
+    </script>
 </body>
 </html>
