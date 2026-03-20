@@ -47,6 +47,9 @@
         .game-card, .side-btn, h2, h3, p, input { text-shadow: 2px 2px 4px rgba(0,0,0,1); }
 
         #gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        /* Smaller abcabc image that fits on screen */
+        #gatekeeper img { max-width: 90vw; max-height: 90vh; border: 2px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
         .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
         .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); border-left: 4px solid var(--accent); }
@@ -65,7 +68,9 @@
         #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; z-index: 5001; }
         
         .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-        .cloak-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+        .style-btn { background: var(--side); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 4px; font-size: 12px; transition: 0.1s; cursor: none !important; }
+        .style-btn:hover { border-color: var(--accent); background: var(--border); }
     </style>
 </head>
 <body onload="init()">
@@ -94,16 +99,21 @@
         <div id="settings-area">
             <div class="config-box">
                 <h2>Quick Cloaks (Shift + 1-6)</h2>
-                <div class="cloak-grid">
+                <div class="grid-layout">
                     <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">[1] My Apps</button>
                     <button class="side-btn" onclick="setPreset('Home', 'https://ssl.gstatic.com/classroom/favicon.png')">[2] Classroom</button>
                     <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">[3] IXL</button>
-                    <button class="side-btn" onclick="setPreset('Google Docs', 'google-docs.png')">[4] Docs</button>
-                    <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">[5] Slides</button>
-                    <button class="side-btn" onclick="setPreset('New Tab', 'https://www.sdflsafdjljsfdjfalm.com/favicon.icodfsf')">[6] New Tab</button>
+                    <button class="side-btn" onclick="setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico')">[4] Docs</button>
+                    <button class="side-btn" onclick="setPreset('Google Slides', 'https://ssl.gstatic.com/docs/presentations/images/favicon_v3.ico')">[5] Slides</button>
+                    <button class="side-btn" onclick="setPreset('Google', 'https://www.google.com/favicon.ico')">[6] Google</button>
                 </div>
             </div>
-            <div class="config-box"><h2>Styles (Shift + Esc to Cycle)</h2><p>Use hotkeys to cycle through 25 themes instantly.</p></div>
+            
+            <div class="config-box">
+                <h2>Manual Style Selection</h2>
+                <div id="style-grid" class="grid-layout">
+                    </div>
+            </div>
         </div>
     </div>
 
@@ -111,35 +121,35 @@
         const combo = "404"; let inputSeq = ""; 
         const canvas = document.getElementById('trail-canvas'); const ctx = canvas.getContext('2d'); 
         let points = []; let ripple = {x:0, y:0, r:0, a:0};
-        let currentLook = 0;
+        let currentLook = 1;
 
         const games = [
-            {n: "Bloons TD", p: "./games/bloonstd/index.html", dev: true},
-            {n: "Geo Dash", p: "./games/geodash/index.html", dev: false},
-            {n: "Duck Life 3", p: "./games/ducklife3/index.html", dev: false},
-            {n: "Slope", p: "./games/slope/index.html", dev: true},
-            {n: "2048", p: "./games/2048/index.html", dev: false},
-            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html", dev: true},
-            {n: "Flappy Bird", p: "./games/flappybird/index.html", dev: false},
-            {n: "Sand", p: "./games/Sand.html", dev: false},
-            {n: "Basket Random", p: "./games/basket-random/index.html", dev: false},
-            {n: "Drive Mad", p: "./games/drive-mad/index.html", dev: false},
-            {n: "1v1 LOL", p: "./games/1v1lol/index.html", dev: true},
-            {n: "BTTS", p: "./BTTS/index.html", dev: false},
-            {n: "Vex 7", p: "./games/vex7/index.html", dev: false},
-            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html", dev: false},
-            {n: "OVO", p: "./games/OVO/index.html", dev: false},
-            {n: "Ball Blast", p: "./games/Ball Blast.html", dev: false},
-            {n: "Dunes", p: "./games/Dune.html", dev: false},
-            {n: "Appel", p: "./games/Appel v1.html", dev: false},
-            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html", dev: true},
-            {n: "Square Sling", p: "./games/SS.html", dev: false},
-            {n: "Dunk Shot", p: "./games/DS.html", dev: false},
-            {n: "Sky Ball", p: "./games/SB.html", dev: false},
-            {n: "BITTS", p: "./games/BITTS/BITTS.html", dev: false},
-            {n: "Tag #2", p: "./games/Tag-main/index.html", dev: false},
-            {n: "Cookie Clicker", p: "./CC/index.html", dev: false},
-            {n: "Tube Jumpers", p: "./games/TJ.html", dev: false}
+            {n: "Bloons TD", p: "./games/bloonstd/index.html"},
+            {n: "Geo Dash", p: "./games/geodash/index.html"},
+            {n: "Duck Life 3", p: "./games/ducklife3/index.html"},
+            {n: "Slope", p: "./games/slope/index.html"},
+            {n: "2048", p: "./games/2048/index.html"},
+            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"},
+            {n: "Flappy Bird", p: "./games/flappybird/index.html"},
+            {n: "Sand", p: "./games/Sand.html"},
+            {n: "Basket Random", p: "./games/basket-random/index.html"},
+            {n: "Drive Mad", p: "./games/drive-mad/index.html"},
+            {n: "1v1 LOL", p: "./games/1v1lol/index.html"},
+            {n: "BTTS", p: "./BTTS/index.html"},
+            {n: "Vex 7", p: "./games/vex7/index.html"},
+            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"},
+            {n: "OVO", p: "./games/OVO/index.html"},
+            {n: "Ball Blast", p: "./games/Ball Blast.html"},
+            {n: "Dunes", p: "./games/Dune.html"},
+            {n: "Appel", p: "./games/Appel v1.html"},
+            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"},
+            {n: "Square Sling", p: "./games/SS.html"},
+            {n: "Dunk Shot", p: "./games/DS.html"},
+            {n: "Sky Ball", p: "./games/SB.html"},
+            {n: "BITTS", p: "./games/BITTS/BITTS.html"},
+            {n: "Tag #2", p: "./games/Tag-main/index.html"},
+            {n: "Cookie Clicker", p: "./CC/index.html"},
+            {n: "Tube Jumpers", p: "./games/TJ.html"}
         ];
 
         window.onkeydown = e => {
@@ -148,37 +158,57 @@
                 if (inputSeq.endsWith(combo)) document.getElementById('gatekeeper').style.display = 'none';
                 return;
             }
-            // HOTKEYS
             if (e.shiftKey) {
-                if(e.key === "1") setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png');
-                if(e.key === "2") setPreset('Home', 'https://ssl.gstatic.com/classroom/favicon.png');
-                if(e.key === "3") setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico');
-                if(e.key === "4") setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico');
-                if(e.key === "5") setPreset('Google Slides', 'SLIDES.png');
-                if(e.key === "6") setPreset('Google', 'https://www.google.com/favicon.ico');
+                if(["1","2","3","4","5","6"].includes(e.key)) {
+                    const presets = [
+                        ['My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png'],
+                        ['Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png'],
+                        ['IXL | Dashboard', 'https://www.ixl.com/favicon.ico'],
+                        ['Google Slides', 'slides.png'],
+                        ['Google Docs', 'google-docs.png'],
+                        ['New Tab', 'https://www.goosdfdfgdsgfdsafsdle.com/favicon.ico']
+                    ];
+                    setPreset(presets[parseInt(e.key)-1][0], presets[parseInt(e.key)-1][1]);
+                }
                 if(e.key === "Escape") { currentLook = (currentLook % 25) + 1; setLook(currentLook); }
             }
         };
 
         function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
         function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
-        function setLook(v) { document.body.setAttribute('data-look', v); localStorage.setItem('p404_look', v); }
+        function setLook(v) { currentLook = parseInt(v); document.body.setAttribute('data-look', v); localStorage.setItem('p404_look', v); }
         function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
+        function panic() { window.location.href = "https://classroom.google.com"; }
 
         function renderGames() {
             const grid = document.getElementById('game-grid'); const term = document.getElementById('search').value.toLowerCase();
             grid.innerHTML = '';
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div'); card.className = `game-card ${g.dev ? 'dev-outline' : ''}`;
+                const card = document.createElement('div'); card.className = `game-card`;
                 card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
             });
+        }
+
+        function buildStyleGrid() {
+            const grid = document.getElementById('style-grid');
+            for(let i=1; i<=25; i++) {
+                const b = document.createElement('button');
+                b.className = 'style-btn';
+                b.innerText = `Style ${i}`;
+                b.onclick = () => setLook(i);
+                grid.appendChild(b);
+            }
         }
 
         function showTab(t) {
             ['content', 'settings', 'records'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
             document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
+            ['nav-home', 'nav-records', 'nav-settings'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(`nav-${t}`).classList.add('active');
         }
 
+        function saveRecords() { localStorage.setItem('p404_rec', document.getElementById('records-text').value); }
+        
         window.onmousemove = e => { points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
         window.onclick = e => { ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
 
@@ -199,10 +229,12 @@
 
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            renderGames(); animate();
+            renderGames(); buildStyleGrid(); animate();
             const l = localStorage.getItem('p404_look') || '1'; setLook(l);
             const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i');
+            const r = localStorage.getItem('p404_rec');
             if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;
+            if(r) document.getElementById('records-text').value = r;
         }
     </script>
 </body>
