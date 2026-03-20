@@ -2,9 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Research Project</title> <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; }
-        #game-frame { width: 100%; height: 100%; border: none; }
+    <title>My Research Project</title> 
+    <style>
+        body, html { 
+            margin: 0; padding: 0; 
+            height: 100%; width: 100%; 
+            overflow: hidden; background: #000; 
+        }
+        #container, #game-frame { 
+            width: 100%; height: 100%; 
+            border: none; 
+        }
     </style>
 </head>
 <body>
@@ -12,25 +20,44 @@
 <div id="container"></div>
 
 <script>
-    // This is the URL that was blocked, but we're going to hide it
+    // The actual game source
     const target = "https://abinbins.github.io/a3/tag/";
 
-    // We create a "Blob" which is a fake file stored in the browser's RAM
+    // Optimized Blob content focused strictly on the game
     const blobCode = `
+        <!DOCTYPE html>
         <html>
-            <body style="margin:0;padding:0;overflow:hidden;">
-                <iframe src="${target}" style="width:100%;height:100vh;border:none;" allowfullscreen></iframe>
+            <head>
+                <style>
+                    body, html { 
+                        margin:0; padding:0; 
+                        height:100%; width:100%; 
+                        overflow:hidden; background:#000; 
+                    }
+                    iframe { 
+                        width:100%; height:100%; 
+                        border:none; 
+                    }
+                </style>
+            </head>
+            <body>
+                <iframe src="${target}" allow="autoplay; fullscreen; keyboard"></iframe>
             </body>
         </html>
     `;
 
+    // Create the memory-only file (Blob)
     const blob = new Blob([blobCode], { type: 'text/html' });
     const blobURL = URL.createObjectURL(blob);
 
-    // Create the iframe pointing to our "memory file" instead of a website
+    // Inject the stealth iframe
     const iframe = document.createElement('iframe');
     iframe.id = "game-frame";
     iframe.src = blobURL;
+    
+    // Pass through permissions for the game engine
+    iframe.setAttribute("allow", "autoplay; fullscreen; keyboard");
+    
     document.getElementById('container').appendChild(iframe);
 </script>
 
