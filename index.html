@@ -46,8 +46,10 @@
         body.unlocked, body.unlocked * { cursor: none !important; }
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
 
+        /* --- MOBILE FRIENDLY 404 DECOY --- */
         #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; cursor: default !important; }
-        #gatekeeper img { width: 100%; height: 100%; object-fit: cover; border: none; }
+        #gatekeeper-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; width: 100%; height: 100%; }
+        .gk-img { width: 100%; height: 100%; object-fit: cover; border: none; -webkit-tap-highlight-color: transparent; }
 
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; z-index: 10; }
         .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; cursor: none !important; }
@@ -83,7 +85,14 @@
 </head>
 <body onload="init()">
     <canvas id="trail-canvas"></canvas>
-    <div id="gatekeeper"><img src="abcabc.png" alt="Decoy"></div>
+    
+    <div id="gatekeeper">
+        <div id="gatekeeper-grid">
+            <img class="gk-img" src="first4.png" alt="4" onclick="handleTap('4')">
+            <img class="gk-img" src="middle0.png" alt="0" onclick="handleTap('0')">
+            <img class="gk-img" src="last4.png" alt="4" onclick="handleTap('4')">
+        </div>
+    </div>
 
     <div id="launcher">
         <button id="close-launcher" onclick="closeGame()">EXIT HOME</button>
@@ -202,15 +211,19 @@
             {n: "Tube Jumpers (TEST)", p: "./games/TJ.html"}
         ];
 
-        window.onkeydown = e => {
+        // Handles typing 404
+        window.onkeydown = e => handleTap(e.key);
+
+        function handleTap(key) {
             if (document.getElementById('gatekeeper').style.display !== 'none') {
-                inputSeq += e.key;
+                inputSeq += key;
                 if (inputSeq.endsWith(combo)) {
                     document.getElementById('gatekeeper').style.display = 'none';
                     document.body.classList.add('unlocked');
                 }
+                if (inputSeq.length > 5) inputSeq = inputSeq.slice(-3);
             }
-        };
+        }
 
         function updateCustomTheme() {
             const bg = document.getElementById('color-bg').value;
@@ -235,11 +248,7 @@
         
         function nukeStorage() {
             if(confirm("Are you sure? This will delete all custom themes, records, and presets.")) {
-                localStorage.removeItem('p404_custom');
-                localStorage.removeItem('p404_look');
-                localStorage.removeItem('p404_t');
-                localStorage.removeItem('p404_i');
-                localStorage.removeItem('p404_rec');
+                localStorage.clear();
                 location.reload();
             }
         }
@@ -262,7 +271,6 @@
             grid.innerHTML = '';
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
                 const card = document.createElement('div'); card.className = `game-card`;
-                // Strips (TEST) from display text but keeps the glow check intact below
                 card.innerText = g.n.replace(" (TEST)", ""); 
                 if (g.n.includes("(TEST)")) card.classList.add('test-glow');
                 card.onclick = () => launchGame(g.p); grid.appendChild(card);
@@ -305,10 +313,7 @@
 
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            
-            // Randomly shuffle the games array exactly once when the page loads
             games.sort(() => Math.random() - 0.5);
-
             renderGames(); buildStyleGrid(); animate();
             const custom = localStorage.getItem('p404_custom');
             if(custom) {
