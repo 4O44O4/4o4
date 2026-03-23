@@ -12,8 +12,15 @@
         }
         
         #unity-container { width: 100%; height: 100%; position: relative; }
-        #unity-canvas { width: 100% !important; height: 100% !important; background: #000; }
         
+        /* Fixed: Using an iframe to avoid CORS/Unity data errors */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
         #loading-cover {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #111; display: flex; flex-direction: column;
@@ -33,16 +40,14 @@
             border-radius: 5px; margin-top: 20px; overflow: hidden;
         }
 
-        #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.2s; }
-        
-        /* Hidden UI for Panic */
-        #panic-overlay { display: none; }
+        #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.5s; }
     </style>
 </head>
 <body>
 
     <div id="unity-container">
-        <canvas id="unity-canvas" tabindex="-1"></canvas>
+        <iframe id="game-frame" src="https://edumatt.github.io/spacewaves/"></iframe>
+        
         <div id="loading-cover">
             <div class="spinner"></div>
             <div id="progress-bar"><div id="progress-fill"></div></div>
@@ -51,43 +56,39 @@
     </div>
 
     <script>
-        const canvas = document.querySelector("#unity-canvas");
-        const loadingCover = document.querySelector("#loading-cover");
-        const progressFill = document.querySelector("#progress-fill");
+        const frame = document.getElementById('game-frame');
+        const loadingCover = document.getElementById('loading-cover');
+        const progressFill = document.getElementById('progress-fill');
 
-        const buildUrl = "https://slope3.com/game/space-wave/Build";
-        const config = {
-            dataUrl: buildUrl + "/568ea6b3af616bd57f419c508c933303.data.unityweb",
-            frameworkUrl: buildUrl + "/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb",
-            codeUrl: buildUrl + "/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "do.Games",
-            productName: "Space Waves",
-            productVersion: "1.1.2-ms",
+        // Simulate progress bar and hide loader when iframe is ready
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 20;
+            if (progress >= 90) {
+                progress = 90;
+                clearInterval(interval);
+            }
+            progressFill.style.width = progress + "%";
+        }, 200);
+
+        frame.onload = () => {
+            progressFill.style.width = "100%";
+            setTimeout(() => {
+                loadingCover.style.display = "none";
+                frame.focus();
+            }, 500);
         };
 
         // --- PANIC INTEGRATION ---
         window.addEventListener('keydown', (e) => {
-            if (e.shiftKey && e.key === '1') window.top.location.href = "https://classroom.google.com";
+            // Shift + 1 takes you to Google Classroom
+            if (e.shiftKey && e.key === '1') {
+                window.top.location.href = "https://classroom.google.com";
+            }
         });
 
-        const script = document.createElement("script");
-        script.src = buildUrl + "/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js";
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                progressFill.style.width = (100 * progress) + "%";
-            }).then((unityInstance) => {
-                loadingCover.style.display = "none";
-                // Auto-focus the game
-                canvas.focus();
-            }).catch((message) => {
-                console.error(message);
-            });
-        };
-        document.body.appendChild(script);
-
-        // Keep focus on the game
-        window.addEventListener("mousedown", () => canvas.focus());
+        // Keep focus on the game frame
+        window.addEventListener("mousedown", () => frame.focus());
     </script>
 </body>
 </html>
