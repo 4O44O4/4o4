@@ -46,11 +46,10 @@
         body.unlocked, body.unlocked * { cursor: none !important; }
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
 
-        /* KEYPAD GATEKEEPER */
-        #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        #gatekeeper-grid { display: grid; grid-template-columns: repeat(3, 80px); gap: 15px; }
-        .gk-btn { width: 80px; height: 80px; background: #111; border: 1px solid #333; color: #444; font-size: 24px; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: 0.2s; }
-        .gk-btn:active { background: #222; transform: scale(0.9); color: #fff; border-color: #fff; }
+        /* --- MOBILE FRIENDLY 404 DECOY --- */
+        #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; cursor: default !important; }
+        #gatekeeper-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; width: 100%; height: 100%; }
+        .gk-img { width: 100%; height: 100%; object-fit: cover; border: none; -webkit-tap-highlight-color: transparent; }
 
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; z-index: 10; }
         .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; cursor: none !important; }
@@ -60,8 +59,8 @@
         #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
         #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); cursor: none !important; }
         
-        #content-area, #records-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        #content-area, #records-area, #settings-area, #tests-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
+        #game-grid, #tests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; cursor: none !important; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 15px var(--glow); }
 
@@ -78,7 +77,9 @@
         
         .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+
         .theme-controls { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .color-input-wrap { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
         input[type="color"] { width: 50px; height: 35px; border: 2px solid var(--border); border-radius: 4px; background: none; cursor: none !important; }
     </style>
 </head>
@@ -87,16 +88,9 @@
     
     <div id="gatekeeper">
         <div id="gatekeeper-grid">
-            <div class="gk-btn" onclick="handleTap('1')">1</div>
-            <div class="gk-btn" onclick="handleTap('2')">2</div>
-            <div class="gk-btn" onclick="handleTap('3')">3</div>
-            <div class="gk-btn" onclick="handleTap('4')">4</div>
-            <div class="gk-btn" onclick="handleTap('5')">5</div>
-            <div class="gk-btn" onclick="handleTap('6')">6</div>
-            <div class="gk-btn" onclick="handleTap('7')">7</div>
-            <div class="gk-btn" onclick="handleTap('8')">8</div>
-            <div class="gk-btn" onclick="handleTap('9')">9</div>
-            <div style="grid-column: 2" class="gk-btn" onclick="handleTap('0')">0</div>
+            <img class="gk-img" src="first4.png" alt="4" onclick="handleTap('4')">
+            <img class="gk-img" src="middle0.png" alt="0" onclick="handleTap('0')">
+            <img class="gk-img" src="last4.png" alt="4" onclick="handleTap('4')">
         </div>
     </div>
 
@@ -108,6 +102,7 @@
     <div id="sidebar">
         <h2 style="margin-left:10px; color:var(--accent); font-size: 28px;">404</h2>
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Home</button>
+        <button id="nav-tests" class="side-btn" onclick="showTab('tests')">Tests</button>
         <button id="nav-records" class="side-btn" onclick="showTab('records')">Records</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
     </div>
@@ -118,25 +113,40 @@
             <button class="side-btn" style="background:#cc0000; color:white; opacity:1;" onclick="panic()">PANIC</button>
         </div>
         <div id="content-area" style="display: block;"><div id="game-grid"></div></div>
+        <div id="tests-area"><div id="tests-grid"></div></div>
         <div id="records-area"><textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:rgba(0,0,0,0.3); color:var(--text); padding:20px; border:none; resize:none; cursor: none !important;"></textarea></div>
         
         <div id="settings-area">
             <div class="config-box">
-                <h2>Themes</h2>
+                <h2>Custom Theme Builder</h2>
                 <div class="theme-controls">
-                    <input type="color" id="color-bg" oninput="updateCustomTheme()">
-                    <input type="color" id="color-accent" oninput="updateCustomTheme()">
-                    <input type="color" id="color-text" oninput="updateCustomTheme()">
+                    <div class="color-input-wrap"><label>BG 1</label><input type="color" id="color-bg" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>BG 2</label><input type="color" id="color-bg2" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Sidebar</label><input type="color" id="color-side" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Accent</label><input type="color" id="color-accent" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Text</label><input type="color" id="color-text" oninput="updateCustomTheme()"></div>
                     <button class="side-btn" onclick="resetToPreset()">Reset</button>
                 </div>
-                <div id="style-grid" class="grid-layout" style="margin-top:20px;"></div>
             </div>
+
             <div class="config-box">
-                <h2>Cloaks</h2>
+                <h2>Cloak Presets</h2>
                 <div class="grid-layout">
                     <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">My Apps</button>
                     <button class="side-btn" onclick="setPreset('Classroom', 'https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
+                    <button class="side-btn" onclick="setPreset('IXL', 'https://www.ixl.com/favicon.ico')">IXL</button>
+                    <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">Slides</button>
                 </div>
+            </div>
+            
+            <div class="config-box">
+                <h2>Visual Themes</h2>
+                <div id="style-grid" class="grid-layout"></div>
+            </div>
+            
+            <div class="config-box" style="border-color: #ff4444;">
+                <h2 style="color: #ff4444;">Danger Zone</h2>
+                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Reset Everything</button>
             </div>
         </div>
     </div>
@@ -146,7 +156,12 @@
         const canvas = document.getElementById('trail-canvas'); const ctx = canvas.getContext('2d'); 
         let points = []; let ripple = {x:0, y:0, r:0, a:0};
         
-        let games = [
+        const styleNames = ["Matrix", "Bloodlust", "Vaporwave", "Ghost", "Nebula", "Toxic", "Lava", "Ocean", "Crimson", "Noir", "Lemon", "Cobalt", "Barbie", "Cyan", "Lime", "Autumn", "Sky", "Amethyst", "Magenta", "Emerald", "Slate", "Midnight", "Teal", "Solar", "Atom"];
+
+        // Added your requested games here
+        const games = [
+            {n: "Capybara Clicker", p: "https://capybaraclicker.gitlab.io/"},
+            {n: "Space Waves", p: "https://edumatt.github.io/spacewaves/"},
             {n: "Bloons TD", p: "./games/bloonstd/index.html"}, {n: "Geo Dash", p: "./games/geodash/index.html"}, 
             {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, {n: "Slope", p: "./games/slope/index.html"}, 
             {n: "2048", p: "./games/2048/index.html"}, {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"}, 
@@ -158,62 +173,91 @@
             {n: "Dunes", p: "./games/Dune.html"}, {n: "Appel", p: "./games/Appel v1.html"}, 
             {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"}, {n: "Square Sling", p: "./games/SS.html"}, 
             {n: "Dunk Shot", p: "./games/DS.html"}, {n: "Sky Ball", p: "./games/SB.html"}, 
-            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, {n: "Tag #2", p: "./games/Tag-main/index.html"}, 
-            {n: "Cookie Clicker", p: "./CC/index.html"},
-            {n: "BNTTS", p: "./games/BNTTS.html", t: true}, {n: "Tag OG", p: "./games/TAG/index.html", t: true}, 
-            {n: "Duck Life 1", p: "./games/DuckLife1/index.html", t: true}, {n: "Cut The Rope", p: "./games/CTR.html", t: true}, 
-            {n: "Space Waves", p: "./games/cba.html", t: true}, {n: "BTTS 2", p: "./games/BTTS2.html", t: true}, 
-            {n: "MineCraft", p: "./games/EC.html", t: true}, {n: "Mario 64", p: "./games/SM64.html", t: true}, 
-            {n: "Retro Bowl", p: "./games/RB.html", t: true}, {n: "Tube Jumpers", p: "./games/TJ.html", t: true},
-            {n: "Burrito Bison", p: "./games/BBB.html", t: true}, {n: "Capybara Clicker", p: "./games/cbc.html", t: true}, 
-            {n: "Five Nights At Freddy's", p: "./games/FNAF.html", t: true}
+            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, {n: "Tag #2", p: "./games/Tag-main/index.html"}, {n: "Tag OG", p: "./games/Tag-main/index.html"}, 
+            {n: "Cookie Clicker", p: "./CC/index.html"}
+        ];
+
+        const tests = [
+            {n: "BNTTS", p: "./games/BNTTS.html"}, {n: "Tag OG", p: "./games/TAG/index.html"}, 
+            {n: "Duck Life 1", p: "./games/DuckLife1/index.html"}, {n: "Cut The Rope", p: "./games/CTR.html"}, 
+            {n: "Space Waves (Test)", p: "./games/cba.html"}, {n: "BTTS 2", p: "./games/BTTS2.html"}, 
+            {n: "MineCraft", p: "./games/EC.html"}, {n: "Mario 64", p: "./games/SM64.html"}, 
+            {n: "Retro Bowl", p: "./games/RB.html"}, {n: "Tube Jumpers", p: "./games/TJ.html"}
         ];
 
         window.onkeydown = e => handleTap(e.key);
 
         function handleTap(key) {
-            if (document.getElementById('gatekeeper').style.display !== 'none') {
+            const gk = document.getElementById('gatekeeper');
+            if (gk.style.display !== 'none') {
                 inputSeq += key;
                 if (inputSeq.endsWith(combo)) {
-                    document.getElementById('gatekeeper').style.display = 'none';
+                    gk.style.display = 'none';
                     document.body.classList.add('unlocked');
-                    inputSeq = "";
-                } else if (inputSeq.length >= 3) {
-                    inputSeq = ""; 
                 }
+                if (inputSeq.length > 5) inputSeq = inputSeq.slice(-3);
             }
         }
 
-        function shuffleGames() {
-            for (let i = games.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [games[i], games[j]] = [games[j], games[i]];
-            }
+        function updateCustomTheme() {
+            const bg = document.getElementById('color-bg').value;
+            const bg2 = document.getElementById('color-bg2').value;
+            const side = document.getElementById('color-side').value;
+            const acc = document.getElementById('color-accent').value;
+            const txt = document.getElementById('color-text').value;
+            document.body.removeAttribute('data-look');
+            document.documentElement.style.setProperty('--bg', bg);
+            document.documentElement.style.setProperty('--bg2', bg2);
+            document.documentElement.style.setProperty('--side', side);
+            document.documentElement.style.setProperty('--accent', acc);
+            document.documentElement.style.setProperty('--text', txt);
+            localStorage.setItem('p404_custom', JSON.stringify({bg, bg2, side, acc, txt}));
         }
 
-        function renderGames() {
-            const grid = document.getElementById('game-grid');
-            const term = document.getElementById('search').value.toLowerCase();
-            grid.innerHTML = '';
-            games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div');
-                card.className = g.t ? 'game-card test-glow' : 'game-card';
-                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
-            });
-        }
-
-        function showTab(t) {
-            ['content', 'settings', 'records'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
-            document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
-            ['nav-home', 'nav-records', 'nav-settings'].forEach(id => document.getElementById(id).classList.remove('active'));
-            document.getElementById(`nav-${t}`).classList.add('active');
-        }
+        function resetToPreset() { localStorage.removeItem('p404_custom'); location.reload(); }
+        function nukeStorage() { if(confirm("Nuke all data?")) { localStorage.clear(); location.reload(); } }
 
         function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
         function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
+        
+        function showTab(t) {
+            ['content', 'settings', 'records', 'tests'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
+            document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
+            ['nav-home', 'nav-records', 'nav-settings', 'nav-tests'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(`nav-${t}`).classList.add('active');
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('game-grid'); 
+            const tGrid = document.getElementById('tests-grid');
+            const term = document.getElementById('search').value.toLowerCase();
+            grid.innerHTML = ''; tGrid.innerHTML = '';
+            
+            games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
+                const card = document.createElement('div'); card.className = 'game-card';
+                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
+            });
+            tests.filter(t => t.n.toLowerCase().includes(term)).forEach(t => {
+                const card = document.createElement('div'); card.className = 'game-card test-glow';
+                card.innerText = t.n; card.onclick = () => launchGame(t.p); tGrid.appendChild(card);
+            });
+        }
+
+        function buildStyleGrid() {
+            const grid = document.getElementById('style-grid');
+            styleNames.forEach((name, i) => {
+                const b = document.createElement('button'); b.className = 'side-btn'; b.innerText = name;
+                b.onclick = () => { document.body.setAttribute('data-look', i+1); localStorage.setItem('p404_look', i+1); localStorage.removeItem('p404_custom'); };
+                grid.appendChild(b);
+            });
+        }
+
+        function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
         function panic() { window.location.href = "https://classroom.google.com"; }
         function saveRecords() { localStorage.setItem('p404_rec', document.getElementById('records-text').value); }
-        function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; }
+
+        window.onmousemove = e => { if(document.body.classList.contains('unlocked')) points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
+        window.onclick = e => { if(document.body.classList.contains('unlocked')) ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -232,11 +276,23 @@
 
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            shuffleGames(); // RANDOM ORDER ON LOAD
-            renderGames(); animate();
-            window.onmousemove = e => { if(document.body.classList.contains('unlocked')) points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
-            window.onclick = e => { if(document.body.classList.contains('unlocked')) ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
+            renderGames(); buildStyleGrid(); animate();
+            const custom = localStorage.getItem('p404_custom');
+            if(custom) {
+                const c = JSON.parse(custom);
+                document.getElementById('color-bg').value = c.bg;
+                document.getElementById('color-bg2').value = c.bg2 || c.bg;
+                document.getElementById('color-side').value = c.side;
+                document.getElementById('color-accent').value = c.acc;
+                document.getElementById('color-text').value = c.txt;
+                updateCustomTheme();
+            } else {
+                const l = localStorage.getItem('p404_look') || '1';
+                document.body.setAttribute('data-look', l);
+            }
+            const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i');
             const r = localStorage.getItem('p404_rec');
+            if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;
             if(r) document.getElementById('records-text').value = r;
         }
     </script>
