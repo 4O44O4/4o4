@@ -1,100 +1,289 @@
 <!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Space Waves</title>
-    <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #000; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
-        
-        #unity-container { width: 100%; height: 100%; position: relative; }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #000;
-        }
+<html lang="en-us">
 
-        #loading-cover {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #111; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 10;
-        }
-
-        .spinner {
-            width: 50px; height: 50px; border: 5px solid #333;
-            border-top: 5px solid #3498db; border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        #progress-bar {
-            width: 200px; height: 10px; background: #333;
-            border-radius: 5px; margin-top: 20px; overflow: hidden;
-        }
-
-        #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.5s; }
-
-        p { color: #666; font-family: sans-serif; margin-top: 10px; }
-    </style>
-</head>
-<body>
-
+	<script>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>
+      Space Waves
+    </title>
+    <link rel="stylesheet" href="TemplateData/style.css" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body class="noselect">
     <div id="unity-container">
-        <iframe id="game-frame" src="https://edumatt.github.io/spacewaves/"></iframe>
-        
-        <div id="loading-cover">
-            <div class="spinner"></div>
-            <div id="progress-bar"><div id="progress-fill"></div></div>
-            <p>Loading Space Waves...</p>
-        </div>
+      <canvas id="unity-canvas">
+      </canvas>
     </div>
-
-    <script>
-        const frame = document.getElementById('game-frame');
-        const loadingCover = document.getElementById('loading-cover');
-        const progressFill = document.getElementById('progress-fill');
-
-        // Fake progress bar logic for better UX
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress >= 90) {
-                progress = 90;
-                clearInterval(interval);
-            }
-            progressFill.style.width = progress + "%";
-        }, 150);
-
-        // Actual load detection
-        frame.onload = () => {
-            progressFill.style.width = "100%";
-            setTimeout(() => {
-                loadingCover.style.display = "none";
-                frame.focus();
-            }, 500);
-        };
-
-        // --- PANIC KEY: Shift + 1 ---
-        window.addEventListener('keydown', (e) => {
-            if (e.shiftKey && e.key === '1') {
-                window.top.location.href = "https://classroom.google.com";
-            }
-        });
-
-        // Ensure keyboard input works by forcing focus back to game
-        window.addEventListener("mousedown", () => frame.focus());
-        
-        // Some browsers block focus on load, so we try again after a click
-        document.body.addEventListener('click', () => {
-            frame.focus();
-        }, { once: true });
+    <div id="loading-cover" style="display:none;">
+      <div id="unity-loading-bar">
+        <div id="unity-logo">
+          <img src="logo.png" />
+        </div>
+        <br />
+        <br />
+        <br />
+        <div id="unity-progress-bar-empty" style="display: none;">
+          <div id="unity-progress-bar-full">
+          </div>
+        </div>
+        <div class="spinner">
+        </div>
+      </div>
+    </div>
+    <script src="./microsoftDataMigrationDO.js">
     </script>
+    <script>
+      document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
+        microsoftMigration();
+      });
+	  
+      window.addEventListener(&#34;PlayerPrefsReady&#34;, () =&gt; {
+        migratePlayerPrefs();
+      });
+    </script>
+    <script>
+      window.addEventListener(&#34;load&#34;, function () {
+        if (&#34;serviceWorker&#34; in navigator) {
+          navigator.serviceWorker.register(&#34;ServiceWorker.js&#34;);
+        }
+      });
+	  
+	  const container = document.querySelector(&#34;#unity-container&#34;);
+      const canvas = document.querySelector(&#34;#unity-canvas&#34;);
+      const loadingCover = document.querySelector(&#34;#loading-cover&#34;);
+      const progressBarEmpty = document.querySelector(&#34;#unity-progress-bar-empty&#34;);
+      const progressBarFull = document.querySelector(&#34;#unity-progress-bar-full&#34;);
+      const spinner = document.querySelector(&#39;.spinner&#39;);
+
+      const buildUrl = &#34;Build&#34;;
+      const loaderUrl = buildUrl + &#34;/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js&#34;;
+      const config = {
+        dataUrl: buildUrl + &#34;/568ea6b3af616bd57f419c508c933303.data.unityweb&#34;,
+        frameworkUrl: buildUrl + &#34;/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb&#34;,
+        codeUrl: buildUrl + &#34;/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb&#34;,
+        streamingAssetsUrl: &#34;StreamingAssets&#34;,
+        companyName: &#34;do.Games&#34;,
+        productName: &#34;Space Waves&#34;,
+        productVersion: &#34;1.1.2-ms&#34;,
+		matchWebGLToCanvasSize: &#34;false&#34;
+      };
+	  
+      loadingCover.style.display = &#34;&#34;;
+	  
+	  var needMigrate = false;
+	  var gameInstance;
+      var script = document.createElement(&#34;script&#34;);
+      script.src = loaderUrl;
+      script.onload = () =&gt; {
+        createUnityInstance(canvas, config, (progress) =&gt; {
+		  spinner.style.display = &#34;none&#34;;
+          progressBarEmpty.style.display = &#34;&#34;;
+          progressBarFull.style.width = 100 * progress + &#34;%&#34;;
+        }).then((unityInstance) =&gt; {
+		  console.log(&#34;&lt;do.G&gt; Unity inited&#34;);
+          gameInstance = unityInstance;
+          loadingCover.style.display = &#34;none&#34;;
+		  resizeCanvas();
+		  loadAds();
+		  
+		  if (needMigrate) {
+			needMigrate = false;
+		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnMigratePlayerPrefs&#39;, window[&#34;fetchPlayerPrefs&#34;]);
+		  }
+		  
+        }).catch((message) =&gt; {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+	  
+	  // Focus
+  	  function setFocus() {
+  	    container.focus();
+  		window.focus();
+  		canvas.focus();
+  	  }
+
+  	  window.addEventListener(&#34;touchstart&#34;, () =&gt; {
+  	    setFocus();
+  	  });
+  	  window.addEventListener(&#34;pointerdown&#34;, () =&gt; {
+  	    setFocus();
+  	  });
+  	  window.addEventListener(&#34;resize&#34;, () =&gt; {
+  	    setFocus();
+		resizeCanvas();
+  	  });
+	  
+	  function resizeCanvas() {
+		var pixelRatio = window.devicePixelRatio || 1;
+		var width = canvas.clientWidth * pixelRatio;
+		var height = canvas.clientHeight * pixelRatio;
+			
+		if (canvas.width != width || canvas.height != height) {
+			if (height &gt; 1080) {
+				canvas.width = Math.floor(width / height * 1080);
+				canvas.height = 1080;
+			}
+			else
+			{
+				canvas.width = width;
+				canvas.height = height;
+			}
+		}
+	  }
+	  
+	  function migratePlayerPrefs() {
+	    if (typeof gameInstance !== &#39;undefined&#39;) {
+		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnMigratePlayerPrefs&#39;, window[&#34;fetchPlayerPrefs&#34;]);
+		} else {
+		  needMigrate = true;
+		}
+	  }
+    </script>
+    <script src="https://assets.msn.com/staticsb/statics/latest/msstart-games-sdk/msstart-v1.0.0-rc.13.min.js">
+    </script>
+    <script>
+      var _interstitialAdInstance = null;
+	  var _rewardedAdInstance = null;
+	  
+	  function loadAds() {
+	    loadInterstitialAd();
+	    loadRewardedAd();
+	  }
+	  
+	  function loadInterstitialAd() {
+	    _interstitialAdInstance = null;
+		
+		$msstart.loadAdsAsync().then(adInstance =&gt; {
+		  // Use the adInstance.instanceId to make a call to showAdsAsync
+		  _interstitialAdInstance = adInstance;
+		  console.log(&#34;Interstitial ad successfully loaded!&#34;);
+	    }).catch(e =&gt; {
+		  console.error(&#39;&lt;do.G&gt; Error loading interstitial ad. Will retry in 20 seconds...&#39;, e);
+		  setTimeout(loadInterstitialAd, 20000);
+		});
+	  }
+	  
+	  function loadRewardedAd() {
+	    _rewardedAdInstance = null;
+		
+		$msstart.loadAdsAsync(true).then(adInstance =&gt; {
+		  // Pass in boolean true for the optional parameter isRewardedAd, to fetch Rewarded ads
+		  _rewardedAdInstance = adInstance;
+		  console.log(&#34;Rewarded ad successfully loaded!&#34;);
+	    }).catch(e =&gt; {
+		  console.error(&#39;&lt;do.G&gt; Error loading rewarded ad. Will retry in 20 seconds...&#39;, e);
+		  setTimeout(loadRewardedAd, 20000);
+		});
+	  }
+	  
+	  async function showInterstitialAd() {
+	    if (_interstitialAdInstance == null) {
+		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
+		  return;
+		}
+		
+		let t;
+		
+		try {
+		  t = await $msstart.showAdsAsync(_interstitialAdInstance.instanceId);
+		} catch (e) {
+		  console.error(&#39;&lt;do.G&gt; Error show interstitial ad: &#39;, e);
+		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
+		  loadInterstitialAd();
+		}
+		
+		if (t) {
+		  try {
+		    await t.showAdsCompletedAsync;
+			gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdClose&#39;);
+			loadInterstitialAd();
+		  } catch (e) {
+            console.error(&#39;&lt;do.G&gt; Error interstitial showAdsCompletedAsync: &#39;, e);
+		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
+		    loadInterstitialAd();
+          }
+		}
+	  }
+	  
+	  async function showRewardedAd() {
+	    if (_rewardedAdInstance == null) {
+		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
+		  return;
+		}
+		
+		let t;
+		
+		try {
+		  t = await $msstart.showAdsAsync(_rewardedAdInstance.instanceId);
+		} catch (e) {
+		  console.error(&#39;&lt;do.G&gt; Error show rewarded ad: &#39;, e);
+		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
+		  loadRewardedAd();
+		}
+		
+		if (t) {
+		  try {
+		    await t.showAdsCompletedAsync;
+			gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnReward&#39;);
+			loadRewardedAd();
+		  } catch (e) {
+            console.error(&#39;&lt;do.G&gt; Error rewarded showAdsCompletedAsync: &#39;, e);
+		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
+		    loadRewardedAd();
+          }
+		}
+	  }
+    </script>
+    <!-- Top Notification -->
+<style>
+#nxtcoreee3-notification {
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20,20,20,0.95);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+  font-family: sans-serif;
+  font-size: 15px;
+  z-index: 999999;
+  transition: top 0.5s ease;
+}
+
+#nxtcoreee3-notification img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>
+
+<div id="nxtcoreee3-notification">
+ <img src="https://raw.githubusercontent.com/nxtcoreee3/Drive-Mad/main/IMG_0556.JPG" alt="profile">
+  <span>Cracked by nxtcoreee3</span>
+</div>
+
+<script>
+const notif = document.getElementById("nxtcoreee3-notification");
+
+setTimeout(() => {
+  notif.style.top = "20px"; // slide down
+}, 300);
+
+setTimeout(() => {
+  notif.style.top = "-120px"; // slide up
+}, 5300);
+</script> 
 </body>
 </html>
