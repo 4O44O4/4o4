@@ -1,60 +1,710 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Line Rider</title>
-    <meta name="author" content="Emergent Studios">
-    <meta name="description" content="Play Line Rider for free! Line Rider is a classic sandbox game where you draw a track for the sledder to ride on. Simple concept, endless possibilities, oddly addicting!" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Target Rider</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Line Rider">
-    <meta property="og:title" content="Line Rider" />
-    <meta property="og:description" content="Play Line Rider for free! Line Rider is a classic sandbox game where you draw a track for the sledder to ride on. Simple concept, endless possibilities, oddly addicting!" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.linerider.com" />
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #ffffff;
+      color: #111827;
+    }
 
-    <meta name="twitter:image:src" content="https://www.linerider.com/_v2153.0/social.png" />
-    <meta name="twitter:image:width" content="1200" />
-    <meta name="twitter:image:height" content="630" />
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+    }
 
-    <meta property="og:image" content="https://www.linerider.com/_v2153.0/social.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    .title {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      color: #111827;
+    }
 
-    <meta name="apple-itunes-app" content="app-id=1475853607">
-    <style type="text/css">
-      body {
-        margin: 0;
-      }
-      #initial-loading-text {
-        font-family: sans-serif;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    </style>
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
 
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    button {
+      border: none;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #e5e7eb;
+      color: #111827;
+      border: 1px solid #d1d5db;
+      transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
 
-    <link rel="preload" href="/_v2153.0/bosh-sprite.svg" as="fetch" crossorigin>
-    <link rel="preload" href="/_v2153.0/test-lines.png" as="image" >
+    button:hover {
+      background: #d1d5db;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+    }
 
-    <script defer src="/_v2153.0/umami.js" data-website-id="22076556-7b9e-4232-a108-49f6c5bdd9b7" data-host-url="https://umami-k1sx.onrender.com"></script>
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
 
-    <script> 
-    !function(){var e=document.createElement("script");if(!("noModule"in e)&&"onbeforeload"in e){var t=!1;document.addEventListener("beforeload",function(n){if(n.target===e)t=!0;else if(!n.target.hasAttribute("nomodule")||!t)return;n.preventDefault()},!0),e.type="module",e.src=".",document.head.appendChild(e),e.remove()}}();
-    </script>
+    button.primary {
+      background: #22c55e;
+      border-color: #16a34a;
+      color: #052e16;
+      font-weight: 600;
+    }
 
-    <script type="module" src="/_v2153.0/main.js" crossorigin></script>
-    <script defer nomodule src="/_v2153.0/main.legacy.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <div id="initial-loading-text">Loading...</div>
+    button.primary:hover {
+      background: #16a34a;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
+    }
+
+    button.tool-active {
+      background: #f97316;
+      border-color: #ea580c;
+      color: #ffffff;
+    }
+
+    #levelLabel {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    #statusLabel {
+      min-width: 140px;
+      text-align: right;
+      color: #2563eb;
+      font-weight: 500;
+    }
+
+    #gameCanvas {
+      flex: 1;
+      display: block;
+      background: #ffffff;
+      cursor: crosshair;
+    }
+
+    .hint-strip {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(243, 244, 246, 0.9);
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 0.75rem;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="title">Target Rider · Prototype</div>
+    <div class="controls">
+      <button id="playBtn" class="primary">▶ Play</button>
+      <button id="clearTrackBtn">✏️ Clear Track</button>
+      <button id="eraseBtn">🧽 Erase</button>
+      <button id="newTargetsBtn">🎯 New Targets</button>
+      <span id="levelLabel">Level 1</span>
+      <span id="statusLabel"></span>
     </div>
-  </body>
+  </div>
+
+  <canvas id="gameCanvas"></canvas>
+  <div class="hint-strip">
+    Draw lines (black), use Erase to remove tracks, then press “Play” – the bike rider must hit all bullseyes.
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const playBtn = document.getElementById('playBtn');
+    const clearTrackBtn = document.getElementById('clearTrackBtn');
+    const newTargetsBtn = document.getElementById('newTargetsBtn');
+    const eraseBtn = document.getElementById('eraseBtn');
+    const levelLabel = document.getElementById('levelLabel');
+    const statusLabel = document.getElementById('statusLabel');
+
+    // Layout / sizing
+    function resizeCanvasOnce() {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    }
+
+    window.addEventListener('load', resizeCanvasOnce);
+    window.addEventListener('resize', () => {
+      resizeCanvasOnce();
+    });
+
+    // Game state
+    let mode = 'draw'; // 'draw' | 'play'   (simulation state)
+    let toolMode = 'draw'; // 'draw' | 'erase' (input tool)
+    let level = 1;
+
+    // Multiple disjoint paths: each is an array of points [{x,y}, ...]
+    let paths = [];
+    let currentPath = null;
+
+    let targets = [];  // [{x,y,radius,hit}, ...]
+
+    let isDrawing = false;
+    let isErasing = false;
+
+    // Rider physics
+    const RIDER_RADIUS = 8;        // collision body radius
+    const GRAVITY = 650;           // px/s^2
+    const WHEEL_RADIUS = 7;        // wheel radius for physics + drawing
+    let rider = null;              // {x,y,vx,vy,wheelAngle,armPhase}
+    let lastTime = 0;
+
+    // Helpers
+    function getMousePos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
+
+    function getAllPoints() {
+      const pts = [];
+      for (const path of paths) {
+        pts.push(...path);
+      }
+      return pts;
+    }
+
+    function totalPointCount() {
+      return getAllPoints().length;
+    }
+
+    function setToolMode(newMode) {
+      toolMode = newMode;
+      if (toolMode === 'erase') {
+        eraseBtn.classList.add('tool-active');
+      } else {
+        eraseBtn.classList.remove('tool-active');
+      }
+    }
+
+    // Drawing / erasing input
+    canvas.addEventListener('mousedown', (evt) => {
+      if (mode !== 'draw') return;
+      const pos = getMousePos(evt);
+
+      if (toolMode === 'draw') {
+        isDrawing = true;
+        currentPath = [pos];
+        paths.push(currentPath);
+      } else if (toolMode === 'erase') {
+        isErasing = true;
+        eraseAt(pos);
+      }
+    });
+
+    canvas.addEventListener('mousemove', (evt) => {
+      if (mode !== 'draw') return;
+      const pos = getMousePos(evt);
+
+      if (isDrawing && toolMode === 'draw' && currentPath) {
+        const last = currentPath[currentPath.length - 1];
+        if (!last || Math.hypot(pos.x - last.x, pos.y - last.y) > 4) {
+          currentPath.push(pos);
+        }
+      } else if (isErasing && toolMode === 'erase') {
+        eraseAt(pos);
+      }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+      isErasing = false;
+      currentPath = null;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      isDrawing = false;
+      isErasing = false;
+      currentPath = null;
+    });
+
+    // Simple eraser: remove any path that has a point near the cursor
+    function eraseAt(pos, radius = 10) {
+      paths = paths.filter(path => {
+        return !path.some(p => Math.hypot(p.x - pos.x, p.y - pos.y) <= radius);
+      });
+    }
+
+    // Targets / difficulty scaling
+    function generateTargets(forLevel) {
+      const n = 2 + forLevel; // Level 1 => 3, etc.
+      const difficulty = Math.min(forLevel, 10);
+
+      const maxRadius = 22;
+      const minRadius = 9;
+      const radius =
+        maxRadius -
+        (maxRadius - minRadius) * ((difficulty - 1) / 9);
+
+      const baseMargin = 90;
+      const minMargin = 25;
+      const margin =
+        baseMargin -
+        (baseMargin - minMargin) * ((difficulty - 1) / 9);
+
+      targets = [];
+
+      for (let i = 0; i < n; i++) {
+        let x, y;
+        let attempts = 0;
+
+        while (true) {
+          attempts++;
+
+          if (difficulty <= 3) {
+            // Central band, easier
+            x = canvas.width * 0.2 + Math.random() * canvas.width * 0.6;
+            y = canvas.height * 0.2 + Math.random() * canvas.height * 0.6;
+          } else if (difficulty <= 6) {
+            // Anywhere with margin
+            x = margin + Math.random() * (canvas.width - margin * 2);
+            y = margin + Math.random() * (canvas.height - margin * 2);
+          } else {
+            // Edges/corners
+            const edge = Math.floor(Math.random() * 4);
+            switch (edge) {
+              case 0: // top band
+                x = margin + Math.random() * (canvas.width - margin * 2);
+                y = margin + Math.random() * (canvas.height * 0.25);
+                break;
+              case 1: // bottom band
+                x = margin + Math.random() * (canvas.width - margin * 2);
+                y = canvas.height - margin - Math.random() * (canvas.height * 0.25);
+                break;
+              case 2: // left band
+                x = margin + Math.random() * (canvas.width * 0.25);
+                y = margin + Math.random() * (canvas.height - margin * 2);
+                break;
+              case 3: // right band
+                x = canvas.width - margin - Math.random() * (canvas.width * 0.25);
+                y = margin + Math.random() * (canvas.height - margin * 2);
+                break;
+            }
+          }
+
+          const tooClose = targets.some(
+            (t) => Math.hypot(t.x - x, t.y - y) < t.radius + radius + 10
+          );
+
+          if (!tooClose || attempts > 20) {
+            targets.push({ x, y, radius, hit: false });
+            break;
+          }
+        }
+      }
+    }
+
+    function allTargetsHit() {
+      return targets.length > 0 && targets.every(t => t.hit);
+    }
+
+    function setStatus(text, highlight = false) {
+      statusLabel.textContent = text || '';
+      statusLabel.style.color = highlight ? '#16a34a' : '#2563eb';
+    }
+
+    function startLevel(newLevel) {
+      level = newLevel;
+      levelLabel.textContent = `Level ${level}`;
+      generateTargets(level);
+
+      // Clear tracks and rider on new level
+      paths = [];
+      currentPath = null;
+      rider = null;
+      mode = 'draw';
+      setToolMode('draw');
+      setStatus('');
+    }
+
+    function handleLevelComplete() {
+      setStatus('Level complete!', true);
+      const currentLevel = level;
+      setTimeout(() => {
+        if (level === currentLevel) startLevel(level + 1);
+      }, 800);
+    }
+
+    // Rider physics
+    function startRun() {
+      if (totalPointCount() < 2) {
+        setStatus('Draw at least one line first.');
+        return;
+      }
+
+      const allPoints = getAllPoints();
+      let highest = allPoints[0];
+      for (const p of allPoints) {
+        if (p.y < highest.y) highest = p;
+      }
+
+      rider = {
+        x: highest.x,
+        y: highest.y - 40,   // start above track
+        vx: 80,              // small forward motion
+        vy: 0,
+        wheelAngle: 0,
+        armPhase: 0
+      };
+      mode = 'play';
+      setStatus('Dropping...');
+    }
+
+    function updateRider(dtSeconds) {
+      if (!rider) return;
+
+      // Gravity
+      rider.vy += GRAVITY * dtSeconds;
+
+      // Integrate
+      rider.x += rider.vx * dtSeconds;
+      rider.y += rider.vy * dtSeconds;
+
+      // Collide with each segment of each path
+      const damping = 0.99;
+
+      for (const path of paths) {
+        if (path.length < 2) continue;
+
+        for (let i = 0; i < path.length - 1; i++) {
+          const p0 = path[i];
+          const p1 = path[i + 1];
+
+          const dx = p1.x - p0.x;
+          const dy = p1.y - p0.y;
+          const lenSq = dx * dx + dy * dy || 1e-6;
+
+          // closest point on segment to rider
+          const t = Math.max(
+            0,
+            Math.min(
+              1,
+              ((rider.x - p0.x) * dx + (rider.y - p0.y) * dy) / lenSq
+            )
+          );
+
+          const cx = p0.x + t * dx;
+          const cy = p0.y + t * dy;
+
+          const dist = Math.hypot(rider.x - cx, rider.y - cy) || 1e-6;
+
+          if (dist < RIDER_RADIUS) {
+            // normal vector
+            const nx = (rider.x - cx) / dist;
+            const ny = (rider.y - cy) / dist;
+
+            // push out
+            rider.x = cx + nx * RIDER_RADIUS;
+            rider.y = cy + ny * RIDER_RADIUS;
+
+            // remove normal component of velocity (slide)
+            const vn = rider.vx * nx + rider.vy * ny;
+            if (vn < 0) {
+              rider.vx -= vn * nx;
+              rider.vy -= vn * ny;
+            }
+
+            rider.vx *= damping;
+            rider.vy *= damping;
+          }
+        }
+      }
+
+      // Off-screen check
+      if (rider.y > canvas.height + 200 || rider.x < -200 || rider.x > canvas.width + 200) {
+        mode = 'draw';
+        setStatus('You fell off. Draw a better track.');
+        rider = null;
+        return;
+      }
+
+      // Target collisions
+      for (const target of targets) {
+        if (target.hit) continue;
+        const dx = rider.x - target.x;
+        const dy = rider.y - target.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist <= target.radius + RIDER_RADIUS * 0.5) {
+          target.hit = true;
+        }
+      }
+
+      if (allTargetsHit()) {
+        mode = 'draw';
+        handleLevelComplete();
+      }
+
+      // Wheel spin animation based on forward speed
+      rider.wheelAngle += (rider.vx / WHEEL_RADIUS) * dtSeconds;
+
+      // Arm waving: faster & more vertical movement = more swing
+      const speed = Math.hypot(rider.vx, rider.vy);
+      const baseFreq = 2;
+      const extraFreq = speed / 120;
+      rider.armPhase += (baseFreq + extraFreq) * dtSeconds;
+    }
+
+    // Rendering
+    function drawBackground() {
+      // plain white background
+    }
+
+    function drawTrack() {
+      if (paths.length === 0) return;
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Single black stroke line
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = '#000000';
+      for (const path of paths) {
+        if (path.length < 2) continue;
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineTo(path[i].x, path[i].y);
+        }
+        ctx.stroke();
+      }
+    }
+
+    function drawTargets() {
+      for (const target of targets) {
+        ctx.save();
+        ctx.translate(target.x, target.y);
+
+        const r = target.radius;
+        ctx.lineWidth = 2;
+
+        // Outer ring (white with black or green stroke)
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = target.hit ? '#16a34a' : '#000000';
+        ctx.fill();
+        ctx.stroke();
+
+        // Middle ring (black)
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.65, 0, Math.PI * 2);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+
+        // Inner circle (white)
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    function drawRider() {
+      if (!rider) return;
+
+      const x = rider.x;
+      const y = rider.y;
+      const wheelAngle = rider.wheelAngle || 0;
+      const armPhase = rider.armPhase || 0;
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#111827';
+
+      // BIKE GEOMETRY
+      const wheelRadius = WHEEL_RADIUS;
+      const wheelSpacing = 24;
+      const rearWheelX = x - wheelSpacing / 2;
+      const frontWheelX = x + wheelSpacing / 2;
+      const wheelY = y + wheelRadius;  // wheels slightly below rider body
+
+      // Wheels (circles)
+      ctx.beginPath();
+      ctx.arc(rearWheelX, wheelY, wheelRadius, 0, Math.PI * 2);
+      ctx.arc(frontWheelX, wheelY, wheelRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Spokes (animated)
+      function drawSpokes(cx, cy) {
+        ctx.beginPath();
+        for (let k = 0; k < 2; k++) {
+          const a = wheelAngle + k * Math.PI / 2;
+          const ex = cx + wheelRadius * Math.cos(a);
+          const ey = cy + wheelRadius * Math.sin(a);
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(ex, ey);
+        }
+        ctx.stroke();
+      }
+      drawSpokes(rearWheelX, wheelY);
+      drawSpokes(frontWheelX, wheelY);
+
+      // Frame: rear to front via seat and head tube
+      const seatX = x - 4;
+      const seatY = y;          // seat near rider body
+      const headTubeX = x + 6;
+      const headTubeY = y - 2;
+
+      // Rear triangle / main frame
+      ctx.beginPath();
+      ctx.moveTo(rearWheelX, wheelY);
+      ctx.lineTo(seatX, seatY);
+      ctx.lineTo(headTubeX, headTubeY);
+      ctx.lineTo(frontWheelX, wheelY);
+      ctx.stroke();
+
+      // Handlebars
+      ctx.beginPath();
+      ctx.moveTo(headTubeX, headTubeY);
+      ctx.lineTo(headTubeX + 6, headTubeY - 4);
+      ctx.stroke();
+
+      // Rider (stick figure) sitting on bike
+      const bodyBottomX = seatX;
+      const bodyBottomY = seatY - 2;
+      const bodyTopY = bodyBottomY - 14;
+      const headRadius = 6;
+      const headCenterY = bodyTopY - headRadius;
+
+      // Body
+      ctx.beginPath();
+      ctx.moveTo(bodyBottomX, bodyBottomY);
+      ctx.lineTo(bodyBottomX, bodyTopY);
+      ctx.stroke();
+
+      // Head
+      ctx.beginPath();
+      ctx.arc(bodyBottomX, headCenterY, headRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Arm to handlebars (fixed)
+      ctx.beginPath();
+      ctx.moveTo(bodyBottomX, bodyTopY + 3);
+      ctx.lineTo(headTubeX + 4, headTubeY - 2);
+      ctx.stroke();
+
+      // Free arm: waving with "gravity"
+      const armAnchorX = bodyBottomX;
+      const armAnchorY = bodyTopY + 3;
+      const armLength = 12;
+
+      // Base hanging-down angle (pi/2 = pointing straight down)
+      // Add oscillation and slight tilt based on vertical velocity
+      const vyInfluence = Math.atan2(rider.vy || 0, 200);
+      const waveAngle = Math.PI / 2 + Math.sin(armPhase) * 0.7 + vyInfluence * 0.6;
+
+      const freeHandX = armAnchorX + armLength * Math.cos(waveAngle);
+      const freeHandY = armAnchorY + armLength * Math.sin(waveAngle);
+
+      ctx.beginPath();
+      ctx.moveTo(armAnchorX, armAnchorY);
+      ctx.lineTo(freeHandX, freeHandY);
+      ctx.stroke();
+
+      // Legs to rear wheel (pedals)
+      ctx.beginPath();
+      ctx.moveTo(bodyBottomX, bodyBottomY);
+      ctx.lineTo(rearWheelX + 2, wheelY - 2);
+      ctx.moveTo(bodyBottomX, bodyBottomY);
+      ctx.lineTo(rearWheelX - 2, wheelY - 2);
+      ctx.stroke();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
+      drawTrack();
+      drawTargets();
+      drawRider();
+    }
+
+    // Main loop
+    function loop(timestamp) {
+      const dt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+      lastTime = timestamp;
+
+      if (mode === 'play') {
+        updateRider(dt);
+      }
+
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    // UI
+    playBtn.addEventListener('click', () => {
+      startRun();
+    });
+
+    clearTrackBtn.addEventListener('click', () => {
+      paths = [];
+      currentPath = null;
+      rider = null;
+      mode = 'draw';
+      setToolMode('draw');
+      setStatus('');
+    });
+
+    eraseBtn.addEventListener('click', () => {
+      if (toolMode === 'erase') {
+        setToolMode('draw');
+      } else {
+        setToolMode('erase');
+      }
+    });
+
+    newTargetsBtn.addEventListener('click', () => {
+      generateTargets(level);
+      setStatus('New targets created.');
+    });
+
+    // Init
+    window.addEventListener('load', () => {
+      resizeCanvasOnce();
+      startLevel(1);
+      requestAnimationFrame(loop);
+    });
+  </script>
+</body>
 </html>
