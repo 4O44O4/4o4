@@ -207,10 +207,7 @@
                 cur: document.getElementById('color-cursor').value
             };
 
-            // Remove the data-look attribute so it doesn't fight the inline styles
             document.body.removeAttribute('data-look');
-            
-            // Apply colors directly as inline styles on root
             const root = document.documentElement;
             root.style.setProperty('--bg', colors.bg);
             root.style.setProperty('--bg2', colors.bg2);
@@ -224,35 +221,24 @@
 
         function applyPreset(id) {
             const root = document.documentElement;
-            
-            // 1. Temporarily clear all inline styles so the browser looks at the CSS file only
+            // 1. CLEAR manual styles to let the preset take over
             const props = ['--bg', '--bg2', '--side', '--accent', '--text', '--cursor-color'];
             props.forEach(p => root.style.removeProperty(p));
 
-            // 2. Set the data-look attribute to trigger the preset from the CSS
+            // 2. Apply preset ID
             document.body.setAttribute('data-look', id);
             localStorage.setItem('p404_look', id);
 
-            // 3. Capture those preset colors immediately
+            // 3. READ the computed values and SYNC them to custom inputs
             const style = getComputedStyle(root);
-            const colors = {
-                bg: rgbToHex(style.getPropertyValue('--bg').trim()),
-                bg2: rgbToHex(style.getPropertyValue('--bg2').trim()),
-                side: rgbToHex(style.getPropertyValue('--side').trim()),
-                acc: rgbToHex(style.getPropertyValue('--accent').trim()),
-                txt: rgbToHex(style.getPropertyValue('--text').trim()),
-                cur: rgbToHex(style.getPropertyValue('--cursor-color').trim())
-            };
+            document.getElementById('color-bg').value = rgbToHex(style.getPropertyValue('--bg').trim());
+            document.getElementById('color-bg2').value = rgbToHex(style.getPropertyValue('--bg2').trim());
+            document.getElementById('color-side').value = rgbToHex(style.getPropertyValue('--side').trim());
+            document.getElementById('color-accent').value = rgbToHex(style.getPropertyValue('--accent').trim());
+            document.getElementById('color-text').value = rgbToHex(style.getPropertyValue('--text').trim());
+            document.getElementById('color-cursor').value = rgbToHex(style.getPropertyValue('--cursor-color').trim());
 
-            // 4. Update the input pickers so they match the preset
-            document.getElementById('color-bg').value = colors.bg;
-            document.getElementById('color-bg2').value = colors.bg2;
-            document.getElementById('color-side').value = colors.side;
-            document.getElementById('color-accent').value = colors.acc;
-            document.getElementById('color-text').value = colors.txt;
-            document.getElementById('color-cursor').value = colors.cur;
-
-            // 5. Save this as the "Custom" theme so it persists properly
+            // 4. Save this sync to localStorage
             updateCustomTheme();
         }
 
