@@ -190,9 +190,8 @@
             }
         }
 
-        // Helper to convert CSS RGB strings to Hex for input fields
         function rgbToHex(rgb) {
-            if (rgb.startsWith('#')) return rgb;
+            if (!rgb || rgb.startsWith('#')) return rgb;
             const parts = rgb.match(/\d+/g);
             if (!parts) return "#000000";
             return "#" + parts.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
@@ -208,22 +207,34 @@
                 cur: document.getElementById('color-cursor').value
             };
 
+            // Remove the data-look attribute so it doesn't fight the inline styles
             document.body.removeAttribute('data-look');
-            document.documentElement.style.setProperty('--bg', colors.bg);
-            document.documentElement.style.setProperty('--bg2', colors.bg2);
-            document.documentElement.style.setProperty('--side', colors.side);
-            document.documentElement.style.setProperty('--accent', colors.acc);
-            document.documentElement.style.setProperty('--text', colors.txt);
-            document.documentElement.style.setProperty('--cursor-color', colors.cur);
+            
+            // Apply colors directly as inline styles on root
+            const root = document.documentElement;
+            root.style.setProperty('--bg', colors.bg);
+            root.style.setProperty('--bg2', colors.bg2);
+            root.style.setProperty('--side', colors.side);
+            root.style.setProperty('--accent', colors.acc);
+            root.style.setProperty('--text', colors.txt);
+            root.style.setProperty('--cursor-color', colors.cur);
             
             localStorage.setItem('p404_custom', JSON.stringify(colors));
         }
 
         function applyPreset(id) {
-            // Apply preset temporarily to read its colors
-            document.body.setAttribute('data-look', id);
-            const style = getComputedStyle(document.documentElement);
+            const root = document.documentElement;
             
+            // 1. Temporarily clear all inline styles so the browser looks at the CSS file only
+            const props = ['--bg', '--bg2', '--side', '--accent', '--text', '--cursor-color'];
+            props.forEach(p => root.style.removeProperty(p));
+
+            // 2. Set the data-look attribute to trigger the preset from the CSS
+            document.body.setAttribute('data-look', id);
+            localStorage.setItem('p404_look', id);
+
+            // 3. Capture those preset colors immediately
+            const style = getComputedStyle(root);
             const colors = {
                 bg: rgbToHex(style.getPropertyValue('--bg').trim()),
                 bg2: rgbToHex(style.getPropertyValue('--bg2').trim()),
@@ -233,7 +244,7 @@
                 cur: rgbToHex(style.getPropertyValue('--cursor-color').trim())
             };
 
-            // Update pickers
+            // 4. Update the input pickers so they match the preset
             document.getElementById('color-bg').value = colors.bg;
             document.getElementById('color-bg2').value = colors.bg2;
             document.getElementById('color-side').value = colors.side;
@@ -241,7 +252,7 @@
             document.getElementById('color-text').value = colors.txt;
             document.getElementById('color-cursor').value = colors.cur;
 
-            // Save as the current custom theme and remove attribute
+            // 5. Save this as the "Custom" theme so it persists properly
             updateCustomTheme();
         }
 
