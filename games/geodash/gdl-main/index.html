@@ -1,0 +1,70 @@
+<script>
+            const loader = document.getElementById("loader");
+            const spinner = document.getElementById("loadingSpinner");
+            const progressWrapper = document.getElementById("progressWrapper");
+            const progressBarBack = document.getElementById("progressBarBack");
+
+            // Instantiate game
+            const gameInstance = UnityLoader.instantiate("gameContainer", "Build/GeometryDashLite.json", {
+                onProgress: (instance, progress) => {
+                    if (!instance.Module) return;
+                    
+                    if (progressWrapper.style.display !== "block") {
+                        progressWrapper.style.display = "block";
+                        spinner.style.display = "none";
+                    }
+
+                    progressBarBack.style.transform = `scaleX(${progress})`;
+
+                    if (progress === 1) {
+                        setTimeout(() => {
+                            loader.style.opacity = "0";
+                            setTimeout(() => loader.remove(), 500);
+                        }, 1500);
+                    }
+                }
+            });
+
+            // Auto-clicker for OK buttons
+            const autoClickOK = () => {
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    if (btn.textContent.trim() === "OK") btn.click();
+                });
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                autoClickOK();
+                setTimeout(autoClickOK, 1000);
+            });
+
+            // Prevent background lag/desync by forcing Web Audio to suspend when clicking away
+            document.addEventListener("visibilitychange", function() {
+                if (gameInstance && gameInstance.Module && gameInstance.Module.WEBAudio) {
+                    if (document.hidden) {
+                        gameInstance.Module.WEBAudio.audioContext.suspend();
+                    } else {
+                        gameInstance.Module.WEBAudio.audioContext.resume();
+                    }
+                }
+            });
+
+            // UI Panel Toggle Logic
+            function toggleInfo() {
+                const panel = document.querySelector(".main-panel");
+                const btnIcon = document.querySelector('button.hide-main-panel i');
+                const isHidden = panel.style.width === "0px";
+
+                if (!isHidden) {
+                    panel.style.width = "0px";
+                    document.querySelector(".main-panel-ads").style.display = "none";
+                    document.querySelector(".main-panel-content").style.display = "none";
+                    btnIcon.textContent = "Info";
+                } else {
+                    panel.style.width = panel.dataset.maxWidth || "300px";
+                    document.querySelector(".main-panel-ads").style.display = "block";
+                    document.querySelector(".main-panel-content").style.display = "block";
+                    btnIcon.textContent = ">>";
+                }
+            }
+        </script>
