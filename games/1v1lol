@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>&#x200E;</title>
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+    
+    <style>
+        /* Force the body to be exactly the size of the screen */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #000;
+        }
+
+        /* Make the game frame fill the entire screen */
+        #itemFrame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+
+        /* Hide everything else from the original code */
+        .navbar, .item-header, .container, .action-row, .grid-2, .item-wrapper > *:not(#itemFrame), section, nav {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe 
+        id="itemFrame" 
+        title="Jumping Shell" 
+        src="" 
+        allow="autoplay; fullscreen; gamepad; focus-without-user-activation *; clipboard-write;" 
+        allowfullscreen>
+    </iframe>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const frame = document.getElementById('itemFrame');
+            // This is the encoded URL from your original "Play" button
+            const encodedUrl = "aHR0cHM6Ly9pZnJhbWUudW5ibG9ja2VkLTc2LWdhbWVzLm9yZy9qdW1waW5nLXNoZWxsLW1haW4v";
+            
+            // Decodes and sets the source immediately
+            try {
+                frame.src = atob(encodedUrl);
+            } catch (e) {
+                console.error("Failed to load game URL");
+            }
+        });
+    </script>
+</body>
+</html>
