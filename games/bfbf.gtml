@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Load Game</title>
+    <style>
+        /* Forces the game to fill the entire browser window */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #game-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Invisible overlay to catch the first click for True Fullscreen */
+        #click-catcher {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99;
+            cursor: pointer;
+        }
+        
+        /* Hide catcher once fullscreen is active */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="click-catcher"></div>
+
+    <iframe id="game-frame" 
+            src="https://images-opensocial.googleusercontent.com/gadgets/proxy?container=ig&url=https://s3.amazonaws.com/production-assetsbucket-8ljvyr17cz0e/bottle-flip/index.html" 
+            allow="autoplay; fullscreen">
+    </iframe>
+
+    <script>
+        const catcher = document.getElementById('click-catcher');
+        const frame = document.getElementById('game-frame');
+
+        // Logic to trigger True Fullscreen on the first click
+        catcher.addEventListener('click', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+
+            // Remove the catcher so the user can interact with the game
+            catcher.classList.add('hidden');
+        });
+    </script>
+
+</body>
+</html>
