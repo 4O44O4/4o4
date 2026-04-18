@@ -1,68 +1,52 @@
 <!DOCTYPE html>
 <html manifest="offline.appcache">
-  <head>
-    <script src="/js/main.js"></script>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Big Tower Tiny Square</title>
+    <title>Big Tower Tiny Square - Gravity Edition</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
-    <link rel="icon" sizes="256x256" href="icon-256.png" />
 
     <style type="text/css">
-      * { padding: 0; margin: 0; }
-      html, body { background: #000; color: #fff; overflow: hidden; touch-action: none; }
-      canvas { touch-action: none; }
+        * { padding: 0; margin: 0; }
+        html, body { background: #000; color: #fff; overflow: hidden; touch-action: none; -ms-touch-action: none; }
+        canvas { touch-action-none; -ms-touch-action: none; }
+        #c2canvasdiv { display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; }
     </style>
-  </head>
-
-  <body>
+</head> 
+ 
+<body> 
     <div id="fb-root"></div>
-
+	
     <div id="c2canvasdiv">
-      <canvas id="c2canvas" width="1920" height="1080">
-        <h1>Your browser does not support HTML5.</h1>
-      </canvas>
+        <canvas id="c2canvas" width="1920" height="1080">
+            <h1>Your browser does not support HTML5.</h1>
+        </canvas>
     </div>
-
+    
     <script src="jquery-2.1.1.min.js"></script>
+
     <script src="c2runtime.js"></script>
 
-    <script>
-      jQuery(document).ready(function () {
-        cr_createRuntime("c2canvas");
-      });
+    <script src="js/main.js"></script>
 
-      // --- NEW GRAVITY OVERRIDE CODE ---
-      // This section monitors the Construct 2 engine and flips gravity
-      
-      setInterval(function() {
-          if (typeof cr_getC2Runtime !== "undefined") {
-              var runtime = cr_getC2Runtime();
-              // Get the player object (Assuming the object is named 'Player')
-              var player = runtime.types.Player.instances[0]; 
-              
-              if (player) {
-                  // Hit Ceiling (Y = 0)
-                  if (player.y <= 10) {
-                      runtime.trigger(cr.plugins_.Platform.prototype.cnds.SetGravity, player);
-                      // This is where you manually tell the engine to flip
-                      player.behavior.Platform.g = -Math.abs(player.behavior.Platform.g); 
-                  }
-                  
-                  // Hit Walls
-                  if (player.x <= 10 || player.x >= runtime.width - 10) {
-                      // Flip gravity direction
-                      player.behavior.Platform.g *= -1;
-                  }
-              }
-          }
-      }, 100); // Checks 10 times per second
+    <script>
+        // This starts the Construct 2 engine
+        jQuery(document).ready(function () {
+            cr_createRuntime("c2canvas");
+        });
+
+        // This ensures the game stays focused so keys work
+        window.addEventListener("keydown", function(e) {
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
     </script>
-  </body>
+</body> 
 </html>
