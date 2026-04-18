@@ -118,6 +118,7 @@
         <div id="settings-area">
             <div class="config-box">
                 <h2>Game Records</h2>
+                <p style="font-size: 14px; opacity: 0.7;">Note: Glowing games are tests.</p>
                 <textarea id="records-text" oninput="saveRecords()" placeholder="Save codes, levels, or scores here..."></textarea>
             </div>
 
@@ -227,16 +228,13 @@
 
         function applyPreset(id) {
             const root = document.documentElement;
-            // 1. CLEAR manual styles to let the preset take over
             const props = ['--bg', '--bg2', '--side', '--accent', '--text', '--cursor-color'];
             props.forEach(p => root.style.removeProperty(p));
 
-            // 2. Apply preset ID
             document.body.setAttribute('data-look', id);
             localStorage.setItem('p404_look', id);
 
-            // 3. READ the computed values and SYNC them to custom inputs
-            const style = getComputedStyle(root);
+            const style = getComputedStyle(document.body);
             document.getElementById('color-bg').value = rgbToHex(style.getPropertyValue('--bg').trim());
             document.getElementById('color-bg2').value = rgbToHex(style.getPropertyValue('--bg2').trim());
             document.getElementById('color-side').value = rgbToHex(style.getPropertyValue('--side').trim());
@@ -244,7 +242,6 @@
             document.getElementById('color-text').value = rgbToHex(style.getPropertyValue('--text').trim());
             document.getElementById('color-cursor').value = rgbToHex(style.getPropertyValue('--cursor-color').trim());
 
-            // 4. Save this sync to localStorage
             updateCustomTheme();
         }
 
