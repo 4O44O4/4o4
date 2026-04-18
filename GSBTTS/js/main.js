@@ -1,28 +1,48 @@
-setInterval(function() {
+function gravitySystem() {
     if (typeof cr_getC2Runtime !== "undefined") {
         var runtime = cr_getC2Runtime();
-        
-        // Find the object that has the 'player-sheet0.png' visual
-        var player = Object.values(runtime.types).find(t => 
-            t.animations && 
-            t.animations[0] && 
-            t.animations[0].frames[0].texture_img.src.includes("player-sheet0.png")
-        );
+        var player = null;
 
-        if (player && player.instances[0]) {
-            var inst = player.instances[0];
-            var pBody = inst.behavior.Platform;
+        // Search for the player by the image name you found
+        for (var name in runtime.types) {
+            var t = runtime.types[name];
+            if (t.texture_file && t.texture_file.includes("player-sheet0.png")) {
+                player = t.instances[0];
+                break;
+            }
+        }
 
-            // Trigger gravity flip when hitting boundaries
-            if (inst.y <= 10 && pBody.g > 0) {
-                pBody.g = -Math.abs(pBody.g); // Flip Up
+        if (player && player.behavior && player.behavior.Platform) {
+            var p = player.behavior.Platform;
+            var margin = 20; // Increased sensitivity
+
+            // 1. Flip UP when hitting the CEILING
+            if (player.y <= margin && p.g > 0) {
+                p.g = -Math.abs(p.g);
             }
-            if (inst.y >= (runtime.height - 50) && pBody.g < 0) {
-                pBody.g = Math.abs(pBody.g); // Flip Down
+
+            // 2. Flip DOWN when hitting the FLOOR
+            if (player.y >= (runtime.height - (player.height + margin)) && p.g < 0) {
+                p.g = Math.abs(p.g);
             }
-            if (inst.x <= 10 || inst.x >= (runtime.width - 50)) {
-                pBody.g *= -1; // Flip on walls
+
+            // 3. Flip direction when hitting SIDE WALLS
+            if (player.x <= margin || player.x >= (runtime.width - (player.width + margin))) {
+                // Check if we just hit the wall to prevent "stuck" vibrating
+                if (!player.lastWallHit) {
+                    p.g *= -1; 
+                    player.lastWallHit = true;
+                    
+                    // Bounce away slightly to clear the margin
+                    if (player.x <= margin) player.x = margin + 5;
+                    else player.x = runtime.width - (player.width + margin + 5);
+                }
+            } else {
+                player.lastWallHit = false;
             }
         }
     }
-}, 16);
+}
+
+// Run this as fast as possible
+setInterval(gravitySystem, 10);
