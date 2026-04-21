@@ -60,9 +60,6 @@
         }
         .test-glow { animation: testPulse 2s infinite alternate !important; }
 
-        #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        #pass-input { background: #111; border: 2px solid #333; color: #fff; padding: 15px 25px; font-size: 20px; border-radius: 8px; text-align: center; transition: 0.3s; width: 250px; }
-
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; z-index: 10; }
         .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; cursor: none !important; }
         .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); border-left: 4px solid var(--accent); }
@@ -89,12 +86,8 @@
         #records-text { width:100%; height:200px; background:rgba(0,0,0,0.3); color:var(--text); padding:15px; border:1px solid var(--border); border-radius: 8px; resize:vertical; cursor: none !important; }
     </style>
 </head>
-<body onload="init()">
+<body class="unlocked" onload="init()">
     <canvas id="trail-canvas"></canvas>
-    
-    <div id="gatekeeper">
-        <input type="password" id="pass-input" placeholder="Password" autocomplete="off" />
-    </div>
 
     <div id="launcher">
         <button id="close-launcher" onclick="closeGame()">EXIT HOME</button>
@@ -190,7 +183,7 @@
             {n: "Cookie Clicker", p: "./CC/index.html"}, {n: "Death run 3d", p: "./games/DR3D/index.html"},
             {n: "FNAF", p: "./games/FNAF.html"}, {n: "Penalty Shooters 2", p: "./games/ps2/index.html"},
             {n: "Better GD (TEST)", p: "./games/geodash/gdl-main/index.html"}, {n: "Scratch GD", p: "./games/geodash/index.html"}, 
-            {n: "Password Game", p: "./games/PG/index.html"}, {n: "Block Blast", p: "./games/BbBb/index.html"}
+            {n: "Password Game", p: "./games/PG/index.html"}, {n: "Block Blast", p: "./games/BbBb/index.html"},
             {n: "Level Devil", p: "./games/LD/index.html"}, {n: "Penalty Shooters", p: "./games/ps1/index.html"},
             {n: "Motox 3M (TEST)", p: "./games/mx3m.html"}, {n: "BFTTS (TEST)", p: "./games/bftts/index.html"}, 
             {n: "BTTS Gravity TEST TEST (TEST)", p: "./GSBTTS/index.html"}, {n: "FNAF 2 (TEST)", p: "./games/FNAF2/index.html"},
@@ -315,10 +308,6 @@
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             renderGames(); buildStyleGrid(); animate();
-            const passInput = document.getElementById('pass-input'); passInput.focus();
-            passInput.addEventListener('input', (e) => {
-                if (e.target.value === "404") { document.getElementById('gatekeeper').style.display = 'none'; document.body.classList.add('unlocked'); }
-            });
 
             const custom = localStorage.getItem('p404_custom');
             if(custom) {
