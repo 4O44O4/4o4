@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+    }
+    #player {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/gh/ioB-ybbolB/rufle@main/ruffle.js"></script>
+</head>
+<body>
+<div id="player"></div>
+<script>
+    const ruffle = window.RufflePlayer.newest();
+    const player = ruffle.createPlayer();
+    player.style.width = "100%";
+    player.style.height = "100%";
+    document.getElementById("player").appendChild(player);
+    player.load("duck-life-treasure-hunt.swf");
+</script>
+</body>
+</html>
