@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-us" style="height:100%">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Duck Life Treasure Hunt</title>
+    <style>
+        /* 1. Fonts */
+        @font-face {
+            font-family: 'TorusB';
+            src: url('torus-bold-webfont.woff2') format('woff2');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'Torus';
+            src: url('torus-regular-webfont.woff2') format('woff2');
+            font-weight: 400;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background: #231F20; 
+        }
+
+        /* 2. Fullscreen Background Loader */
+        #loading-cover {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background-image: url('w.jpg'); 
+            background-size: cover;
+            background-position: center;
+            z-index: 99;
+        }
+
+        /* 3. Centered Loading Box */
+        #loader-content {
+            display: flex; flex-direction: column; align-items: center;
+            background: rgba(35, 31, 32, 0.85);
+            padding: 35px; border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            min-width: 400px;
+        }
+
+        #loader-status { 
+            font-family: 'TorusB', sans-serif; font-size: 18px; 
+            color: #ffffff; margin-bottom: 15px; text-align: center;
+        }
+
+        /* 4. Green Progress Bar */
+        #progress-wrap { 
+            width: 350px; height: 14px; background: #001c00; 
+            border-radius: 7px; overflow: hidden; border: 1px solid #007300;
+        }
+        #progress-fill { 
+            width: 0%; height: 100%; background: #00ff00; 
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transition: width 0.2s ease-out; 
+        }
+
+        #loader-mb { 
+            font-family: 'Torus', sans-serif; font-size: 15px; 
+            color: #cccccc; margin-top: 15px; 
+        }
+
+        #unity-canvas { width: 100vw; height: 100vh; display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div id="loading-cover">
+        <div id="loader-content">
+            <img src="logo.png" style="max-width: 250px; margin-bottom: 25px;" onerror="this.style.display='none'">
+            <div id="loader-status">Initializing...</div>
+            <div id="progress-wrap"><div id="progress-fill"></div></div>
+            <div id="loader-mb">0.00MB / 0.00MB</div>
+        </div>
+    </div>
+
+    <canvas id="unity-canvas"></canvas>
+
+    <script src="Build/DLTH WebGL.loader.js"></script>
+    <script>
+        /** 
+         * CONFIGURATION: Enter your exact file sizes in BYTES here from your folder.
+         **/
+        const fileManifest = {
+            "UnityLoader.js": 409600, 
+            "WebGL.json": 51200,
+            "WebGL.data.unityweb": 37224448,
+            "WebGL.asm.framework.unityweb": 2306867,
+            "WebGL.asm.code.unityweb": 8493465,
+            "WebGL.asm.memory.unityweb": 524288
+        };
+
+        const toMB = (bytes) => (bytes / (1024 * 1024)).toFixed(2);
+        const totalBytes = Object.values(fileManifest).reduce((a, b) => a + b, 0);
+        const totalSizeMB = toMB(totalBytes);
+
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingCover = document.querySelector("#loading-cover");
+        const progressFill = document.querySelector("#progress-fill");
+        const mbText = document.querySelector("#loader-mb");
+        const statusText = document.querySelector("#loader-status");
+
+        const config = {
+            dataUrl: "Build/DLTH WebGL.data",
+            frameworkUrl: "Build/DLTH WebGL.framework.js",
+            codeUrl: "Build/DLTH WebGL.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "504 Games",
+            productName: "Duck Life Treasure Hunt",
+            productVersion: "4.00300",
+        };
+
+        createUnityInstance(canvas, config, (progress) => {
+            const currentBytes = totalBytes * progress;
+            const currentMB = toMB(currentBytes);
+            const percent = (progress * 100).toFixed(0);
+
+            // Logic to display current file name
+            let currentFileName = "Game Assets";
+            let cumulative = 0;
+            for (const [name, size] of Object.entries(fileManifest)) {
+                cumulative += (size / totalBytes);
+                if (progress <= cumulative) {
+                    currentFileName = name;
+                    break;
+                }
+            }
+
+            // Update UI
+            progressFill.style.width = percent + "%";
+            mbText.innerHTML = `${currentMB}MB / ${totalSizeMB}MB (${percent}%)`;
+            
+            if (progress < 1) {
+                statusText.innerHTML = `Downloading ${currentFileName}...`;
+            } else {
+                statusText.innerHTML = "Preparing Game...";
+            }
+
+        }).then((unityInstance) => {
+            // Fade out and hide loader
+            loadingCover.style.transition = "opacity 0.6s ease";
+            loadingCover.style.opacity = "0";
+            setTimeout(() => { loadingCover.style.display = "none"; }, 600);
+        }).catch((message) => {
+            alert(message);
+        });
+    </script>
+</body>
+</html>
