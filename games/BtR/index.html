@@ -20,13 +20,19 @@ html, body {
 
 <script>
 window.addEventListener("load", () => {
+
+    // wait until Ruffle exists
+    if (!window.RufflePlayer) {
+        console.error("Ruffle failed to load");
+        return;
+    }
+
     const ruffle = window.RufflePlayer.newest();
     const player = ruffle.createPlayer();
 
     const container = document.getElementById("ruffle-container");
     container.appendChild(player);
 
-    // Make canvas fill screen
     player.style.width = "100%";
     player.style.height = "100%";
 
