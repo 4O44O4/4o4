@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex,nofollow">
+<title>3Dash</title>
+<script src="./lib/ysdk/v2.js"></script>
+<link rel="stylesheet" href="./lib/game-loader/gameloader2020.css" />
+<script src="./lib/game-loader/gameloader2020.js"></script>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script>
+      YaGames
+        .init()
+        .then(ysdk => {
+          console.log('Yandex SDK initialized');
+          window.ysdk = ysdk;
+        });
+        
+        
+        function Start(){
+
+          var data = window.ysdk.deviceInfo;
+          myGameInstance.SendMessage('YANDEX','GettingDevice',JSON.stringify(data));
+          
+      }
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+	var options = {
+		author: "Vseigru",
+		logo: "logo.jpg",
+		gameName: "3Dash",
+		gameNameEu: "3Dash",
+		gameUrl: "42927",
+		moreLink: ("https://vseigru.net"),
+		allowFullscreen: true,
+		locale: "ru_RU",
+		loader: "unity2020",
+		loaderOptions: {
+			unityLoaderUrl: "Build/3DDash.loader.js",
+			unityConfigOptions: {
+				dataUrl: "Build/3DDash.data.unityweb",
+				frameworkUrl: "Build/3DDash.framework.js.unityweb",
+			    codeUrl: "Build/3DDash.wasm.unityweb",
+				streamingAssetsUrl: "StreamingAssets"
+			}
+		},
+    };
+	GameInit.load(options);	  
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'89f165d1e9c2b740',t:'MTcyMDI4NzgxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
