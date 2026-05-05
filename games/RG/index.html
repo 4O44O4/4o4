@@ -4,7 +4,7 @@
 
     function launch() {
         try {
-            fetch("https://cdn.jsdelivr.net/gh/martinmmcyt/rocket-goal@main/game.html?t=" + Date.now())
+            fetch("./games/RG/index2.html" + Date.now())
                 .then(response => response.text())
                 .then(html => {
                     document.documentElement.innerHTML = html;
