@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<stringresources>
+    <strings>
+        <string id="INSTRUCTIONS">
+            <en>Instructions</en>
+            <es>Instrucciones</es>
+            <de>Anleitung</de>
+            <it>Istruzioni</it>
+            <fr>Instructions</fr>
+            <ru>Инструкция</ru>
+            <pt>Instruções</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="SCORE">
+            <en>Score</en>
+            <es>Puntuación</es>
+            <de>Punkte</de>
+            <it>Punteggio</it>
+            <fr>Score</fr>
+            <ru>СЧЕТ</ru>
+            <pt>Pontuação</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="NEXT">
+            <en>Next</en>
+            <es>Siguiente</es>
+            <de>Nächste</de>
+            <it>Seguente</it>
+            <fr>Suivant</fr>
+            <ru>Будущий</ru>
+            <pt>Seguinte</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="TAP_TO_PLAY">
+            <en>Tap to Start</en>
+            <es>Toca para comenzar</es>
+            <de>Tippe, zum Starten</de>
+            <it>Tocca per iniziare</it>
+            <fr>Touchez pour commencer</fr>
+            <ru>Нажмите, чтобы начать</ru>
+            <pt>Toque para Iniciar</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="SPEED">
+            <en>Speed</en>
+            <es>Velocidad</es>
+            <de>Schnelligkeit</de>
+            <it>Velocità</it>
+            <fr>Vitesse</fr>
+            <ru>Скорость</ru>
+            <pt>Velocidade</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="MUSIC">
+            <en>Music</en>
+            <es>Música</es>
+            <de>Musik</de>
+            <it>Musica</it>
+            <fr>Musique</fr>
+            <ru>Музыка</ru>
+            <pt>Música</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="LEVEL_UP">
+            <en>Level up!</en>
+            <es>¡Aumento de nivel!</es>
+            <de>Aufsteigen!</de>
+            <it>Aumento di livello!</it>
+            <fr>Niveau supérieur!</fr>
+            <ru>Уровень повышен!</ru>
+            <pt>Subir de nível!</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="CUSTOMISATION">
+            <en>Customisation</en>
+            <es>Personalización</es>
+            <de>Konfiguration</de>
+            <it>Personalizzazione</it>
+            <fr>Personnalisation</fr>
+            <ru>Настройка</ru>
+            <pt>Personalização</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="ACHIEVEMENTS">
+            <en>Achievements</en>
+            <es>Logros</es>
+            <de>Erfolge</de>
+            <it>Obiettivi</it>
+            <fr>Succès</fr>
+            <ru>Достижения</ru>
+            <pt>Conquistas</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="COLOR">
+            <en>Color</en>
+            <es>Color</es>
+            <de>Farbe</de>
+            <it>Colore</it>
+            <fr>Couleur</fr>
+            <ru>Цвет</ru>
+            <pt>Cor</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="MUSICPACK">
+            <en>Music pack</en>
+            <es>Paquete musical</es>
+            <de>Musikpaket</de>
+            <it>Pacchetto musicale</it>
+            <fr>Pack musique</fr>
+            <ru>Музыкальный набор</ru>
+            <pt>Pacote de música</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="PLAY">
+            <en>Play</en>
+            <es>Jugar</es>
+            <de>Spielen</de>
+            <it>Gioca</it>
+            <fr>Jouer</fr>
+            <ru>Играть</ru>
+            <pt>Reproduzir</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+		<string id="MATCH_OVER">
+			<en>match over</en>
+			<de>spiel vorbei</de>
+			<es>partido terminado</es>
+			<fr>match terminé</fr>
+			<it>partita finita</it>
+			<pt>partida encerrada</pt>
+			<ru>матч окончен</ru>
+		</string>
+
+
+		<string id="WINNER">
+			<en>Winner</en>
+			<de>Gewinner</de>
+			<es>Ganador</es>
+			<fr>Gagnant</fr>
+			<it>Vincitore</it>
+			<pt>Vencedor</pt>
+			<ru>Победитель</ru>
+		</string>
+
+		<string id="WIN">
+			<en>YOU WIN</en>
+			<de>DU GEWINNST</de>
+			<es>GANAS</es>
+			<fr>VOUS GAGNEZ</fr>
+			<it>VINCERE</it>
+			<pt>VOCÊ GANHA</pt>
+			<ru>ВЫ ВЫИГРАЛИ</ru>
+		</string>
+		
+		<string id="LOST">
+			<en>YOU LOSE</en>
+			<de>DU VERLIERST</de>
+			<es>PIERDES</es>
+			<fr>VOUS PERDEZ</fr>
+			<it>PERDERE</it>
+			<pt>VOCÊ PERDE</pt>
+			<ru>ВЫ ПРОИГРАЛИ</ru>
+		</string>
+
+        <string id="REWARD">
+            <en>Reward</en>
+            <es>Recompensa</es>
+            <de>Belohnung</de>
+            <it>Ricompensa</it>
+            <fr>Récompense</fr>
+            <ru>Награда</ru>
+            <pt>Recompensa</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="ONBOARDING1">
+            <en>Click and hold</en>
+            <es>Haz clic y mantén</es>
+            <de>Klicken und halten</de>
+            <it>Clicca e\ntieni premuto</it>
+            <fr>Cliquez et\nmaintenez appuyé</fr>
+            <ru>Нажмите и удерживайте</ru>
+            <pt>Clique e segure</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="ONBOARDING2">
+            <en>Release now</en>
+            <es>Suelta ahora</es>
+            <de>Jetzt loslassen</de>
+            <it>Rilascia ora</it>
+            <fr>Relâchez maintenant</fr>
+            <ru>Отпустите сейчас</ru>
+            <pt>Solte agora</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="CONTINUE_QUESTION">
+            <en>Continue ?</en>
+            <es>¿ Continuar ?</es>
+            <de>Weiter ?</de>
+            <it>Continuare ?</it>
+            <fr>Continuer ?</fr>
+            <ru>Продолжить ?</ru>
+            <pt>Continuar ?</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="LOADING">
+            <en>Loading</en>
+            <de>Lädt</de>
+            <es>Cargando</es>
+            <fr>Chargement</fr>
+            <it>Caricamento</it>
+            <pt>Carregando</pt>
+			<ru>Загрузка</ru>
+            <nl></nl>
+            <no></no>
+        </string>
+
+		<string id="TUTORIAL_1">
+			<en>HOLD AND DRAG</en>
+			<de>FESTHALTEN UND ZIEHEN</de>
+			<es>MANTENER Y ARRASTRAR</es>
+			<fr>TENIR ET GLISSER</fr>
+			<it>TENERE E TRASCINARE</it>
+			<pt>SEGURAR E ARRASAR</pt>
+			<ru>УДЕРЖИВАЙТЕ И ТЯНИТЕ</ru>
+		</string>
+
+		<string id="TUTORIAL_2">
+			<en>ADJUST FORCE</en>
+			<de>KRAFT ANPASSEN</de>
+			<es>AJUSTAR FUERZA</es>
+			<fr>AJUSTEZ LA FORCE</fr>
+			<it>REGOLAZIONE DELLA FORZA</it>
+			<pt>FORÇA ADJUST</pt>
+			<ru>РЕГУЛИРОВКА СИЛЫ</ru>
+		</string>
+		
+		<string id="TUTORIAL_3">
+			<en>DRAG UP AND DOWN TO AIM</en>
+			<de>ZUM ZIELEN NACH OBEN UND UNTEN ZIEHEN</de>
+			<es>ARRASTRA ARRIBA Y ABAJO PARA APUNTAR</es>
+			<fr>TIRER VERS LE HAUT ET LE BAS POUR VISER</fr>
+			<it>TRASCINA SU E GIÙ PER MIRARE</it>
+			<pt>ARRASTAR PARA CIMA E PARA BAIXO PARA APONTAR</pt>
+			<ru>ТЯНИТЕ ВВЕРХ И ВНИЗ ДЛЯ ПРИЦЕЛИВАНИЯ</ru>
+		</string>
+		
+		<string id="TUTORIAL_4">
+			<en>PULL BACK TO CANCEL</en>
+			<de>ZUM ABBRECHEN ZURÜCKZIEHEN</de>
+			<es>RETROCEDER PARA CANCELAR</es>
+			<fr>RECULER POUR ANNULER</fr>
+			<it>TIRA INDIETRO PER ANNULLARE</it>
+			<pt>VOLTAR PARA CANCELAR</pt>
+			<ru>ОТОЙТИ, ЧТОБЫ ОТМЕНИТЬ</ru>
+		</string>
+
+		<string id="QUESTION_H">
+			<en>EXIT?</en>
+			<de>BEENDEN?</de>
+			<es>¿SALIR?</es>
+			<fr>SORTIR ?</fr>
+			<it>USCIRE?</it>
+			<pt>SAIR?</pt>
+			<ru>ВЫЙТИ?</ru>
+		</string>
+
+		<string id="QUESTION_Q">
+			<en>YOU WILL LOSE YOUR TOURNAMENT PROGRESS AND GOLD.</en>
+			<de>DU VERLIERST DEINEN TURNIERFORTSCHRITT UND DEIN GOLD.</de>
+			<es>PERDERÁS TU PROGRESO EN EL TORNEO Y EL ORO.</es>
+			<fr>VOUS PERDREZ VOTRE PROGRESSION DANS LE TOURNOI ET VOTRE OR.</fr>
+			<it>PERDERETE I PROGRESSI DEL TORNEO E L'ORO.</it>
+			<pt>VOCÊ PERDERÁ SEU PROGRESSO NO TORNEIO E O OURO.</pt>
+			<ru>ВЫ ПОТЕРЯЕТЕ СВОЙ ТУРНИРНЫЙ ПРОГРЕСС И ЗОЛОТО.</ru>
+		</string>
+
+		<string id="QUESTION_Q_L">
+			<en>You will lose your match progress and gold.</en>
+			<de>Sie verlieren Ihren Spielfortschritt und Ihr Gold.</de>
+			<es>Perderás el progreso de la partida y el oro.</es>
+			<fr>Vous perdrez votre progression et votre or.</fr>
+			<it>Perderete i progressi della partita e l'oro.</it>
+			<pt>Você perderá o progresso da partida e o ouro.</pt>
+			<ru>Вы потеряете свой прогресс в матче и золото.</ru>
+		</string>
+
+		<string id="QUESTION_Q_L_FREE">
+			<en>You will lose your match progress.</en>
+			<de>Sie verlieren Ihren Spielfortschritt.</de>
+			<es>Perderás el progreso de la partida.</es>
+			<fr>Vous perdrez votre progression.</fr>
+			<it>Perderete i progressi della partita.</it>
+			<pt>Você perderá o progresso da partida.</pt>
+			<ru>Вы потеряете свой прогресс в матче.</ru>
+		</string>
+
+        <string id="YES">
+            <en>YES</en>
+            <de>JA</de>
+            <es>SÍ</es>
+            <fr>OUI</fr>
+            <it>SÌ</it>
+            <pt>SIM</pt>
+			<ru>ДА</ru>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="NO">
+            <en>NO</en>
+            <de>NEIN</de>
+            <es>NO</es>
+            <fr>NON</fr>
+            <it>NO</it>
+            <pt>NÃO</pt>
+			<ru>НЕТ</ru>
+            <nl></nl>
+            <no></no>
+        </string>
+ 
+		<string id="PAUSED">
+            <en>Game Paused</en>
+            <es>Juego en pausa</es>
+            <de>Spiel pausiert</de>
+            <it>Pausa</it>
+            <fr>Partie en pause</fr>
+            <ru>ИГРА ПРИОСТАНОВЛЕНА</ru>
+            <pt>Jogo pausado</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="SETTINGS">
+            <en>SETTINGS</en>
+            <de>EINSTELLUNGEN</de>
+            <es>AJUSTES</es>
+            <fr>PARAMÈTRES</fr>
+            <it>IMPOSTAZIONI</it>
+            <pt>DEFINIÇÕES</pt>
+            <ru>НАСТРОЙКИ</ru>
+            <nl></nl>
+            <no></no>
+        </string>
+
+		<string id="REWARD">
+			<en>REWARD</en>
+			<de>BELOHNUNG</de>
+			<es>RECOMPENSA</es>
+			<fr>RÉCOMPENSE</fr>
+			<it>PREMIO</it>
+			<pt>RESPONSABILIDADE</pt>
+			<ru>ВОЗНАГРАЖДЕНИЕ</ru>
+		</string>
+
+        <string id="M_LEAGUE">
+            <en>League</en>
+            <es>Liga</es>
+            <de>Liga</de>
+            <it>Campionato</it>
+            <fr>Ligue</fr>
+            <ru>Лига</ru>
+            <pt>Liga</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="M_TOURNAMENTS">
+			<en>TOURNAMENTS</en>
+			<de>TURNIERE</de>
+			<es>TORNEOS</es>
+			<fr>TOURNOIS</fr>
+			<it>TORNEI</it>
+			<pt>TORNEIOS</pt>
+			<ru>ТУРНИРЫ</ru>
+        </string>
+		
+		<string id="M_SHOP">
+			<en>SHOP</en>
+			<de>LADEN</de>
+			<es>TIENDA</es>
+			<fr>BOUTIQUE</fr>
+			<it>NEGOZIO</it>
+			<pt>LOJA</pt>
+			<ru>МАГАЗИН</ru>
+        </string>
+		
+		<string id="M_PLRS">
+			  <en>2 PLAYERS</en>
+			  <de>2 SPIELER</de>
+			  <es>2 JUGADORES</es>
+			  <fr>2 JOUEURS</fr>
+			  <it>2 GIOCATORI</it>
+			  <pt>2 JOGADORES</pt>
+			  <ru>2 ИГРОКА</ru>
+		</string>
+		
+		<string id="M_CUSTOMIZATION">
+			  <en>CUSTOMIZE</en>
+			  <de>ANPASSEN</de>
+			  <es>PERSONALIZAR</es>
+			  <fr>PERSONNALISEZ</fr>
+			  <it>PERSONALIZZARE</it>
+			  <pt>PERSONALIZAR</pt>
+			  <ru>НАСТРОИТЬ</ru>
+		</string>
+
+		<string id="HINT">
+			<en>RULES</en>
+			<de>REGELN</de>
+			<es>REGLAS</es>
+			<fr>RÈGLES</fr>
+			<it>REGOLE</it>
+			<pt>REGRAS</pt>
+			<ru>ПРАВИЛА</ru>
+		</string>
+
+		<string id="T_DESC">
+			<en>BEAT ALL TEAMS IN THE CUP TO WIN THE TOURNAMENT PRIZE. YOU GET DIAMONDS FOR EVERY MATCH YOU PLAY, USE THEM TO OPEN PACKS IN THE SHOP.</en>
+			<de>BESIEGE ALLE TEAMS IM POKAL, UM DEN TURNIERPREIS ZU GEWINNEN. FÜR JEDES SPIEL ERHÄLTST DU DIAMANTEN, MIT DENEN DU PACKUNGEN IM SHOP ÖFFNEN KANNST.</de>
+			<es>VENCE A TODOS LOS EQUIPOS DE LA COPA PARA GANAR EL PREMIO DEL TORNEO. OBTENDRÁS DIAMANTES POR CADA PARTIDO QUE JUEGUES, ÚSALOS PARA ABRIR PACKS EN LA TIENDA.</es>
+			<fr>BATTEZ TOUTES LES ÉQUIPES DE LA COUPE POUR REMPORTER LE PRIX DU TOURNOI. VOUS OBTENEZ DES DIAMANTS POUR CHAQUE MATCH QUE VOUS JOUEZ, UTILISEZ-LES POUR OUVRIR DES PACKS DANS LA BOUTIQUE.</fr>
+			<it>BATTI TUTTE LE SQUADRE DELLA COPPA PER VINCERE IL PREMIO DEL TORNEO. PER OGNI PARTITA GIOCATA SI OTTENGONO DIAMANTI, DA USARE PER APRIRE I PACCHETTI NEL NEGOZIO.</it>
+			<pt>DERROTE TODAS AS EQUIPES DA TAÇA PARA GANHAR O PRÊMIO DO TORNEIO. VOCÊ RECEBE DIAMANTES PARA CADA PARTIDA JOGADA, USE-OS PARA ABRIR PACOTES NA LOJA.</pt>
+			<ru>ОБЫГРАЙТЕ ВСЕ КОМАНДЫ В КУБКЕ, ЧТОБЫ ВЫИГРАТЬ ПРИЗ ТУРНИРА. ЗА КАЖДЫЙ СЫГРАННЫЙ МАТЧ ВЫ ПОЛУЧАЕТЕ БРИЛЛИАНТЫ, ИСПОЛЬЗУЙТЕ ИХ, ЧТОБЫ ОТКРЫТЬ НАБОРЫ В МАГАЗИНЕ.</ru>
+		</string>
+
+		<string id="T_N_1">
+			<en>Division I</en>
+			<de>Aufteilung I</de>
+			<es>División I</es>
+			<fr>Division I</fr>
+			<it>Divisione I</it>
+			<pt>Divisão I</pt>
+			<ru>Дивизион I</ru>
+		</string>
+		
+		<string id="T_N_2">
+			<en>Division II</en>
+			<de>Aufteilung II</de>
+			<es>División II</es>
+			<fr>Division II</fr>
+			<it>Divisione II</it>
+			<pt>Divisão II</pt>
+			<ru>Дивизион II</ru>
+		</string>
+		
+		<string id="T_N_3">
+			<en>Championship cup</en>
+			<de>Meisterschaft Pokal</de>
+			<es>Copa de campeonato</es>
+			<fr>Coupe du championnat</fr>
+			<it>Coppa del campionato</it>
+			<pt>Copa do campeonato</pt>
+			<ru>Кубок чемпионата</ru>
+		</string>
+
+		<string id="T_0">
+			<en>Denmark</en>
+			<de>Denmark</de>
+			<es>Denmark</es>
+			<fr>Denmark</fr>
+			<it>Denmark</it>
+			<pt>Denmark</pt>
+			<ru>Дания</ru>
+		</string>
+		
+		<string id="T_1">
+			<en>Norway</en>
+			<de>Norway</de>
+			<es>Norway</es>
+			<fr>Norway</fr>
+			<it>Norway</it>
+			<pt>Norway</pt>
+			<ru>Норвегия</ru>
+		</string>
+		
+		<string id="T_2">
+			<en>Slovakia</en>
+			<de>Slovakia</de>
+			<es>Slovakia</es>
+			<fr>Slovakia</fr>
+			<it>Slovakia</it>
+			<pt>Slovakia</pt>
+			<ru>Словакия</ru>
+		</string>
+		
+		<string id="T_3">
+			<en>Latvia</en>
+			<de>Latvia</de>
+			<es>Latvia</es>
+			<fr>Latvia</fr>
+			<it>Latvia</it>
+			<pt>Latvia</pt>
+			<ru>Латвия</ru>
+		</string>
+		
+		<string id="T_4">
+			<en>Germany</en>
+			<de>Germany</de>
+			<es>Germany</es>
+			<fr>Germany</fr>
+			<it>Germany</it>
+			<pt>Germany</pt>
+			<ru>Германия</ru>
+		</string>
+		
+		<string id="T_5">
+			<en>Czechia</en>
+			<de>Czechia</de>
+			<es>Czechia</es>
+			<fr>Czechia</fr>
+			<it>Czechia</it>
+			<pt>Czechia</pt>
+			<ru>Чехия</ru>
+		</string>
+		
+		<string id="T_6">
+			<en>Switzerland</en>
+			<de>Switzerland</de>
+			<es>Switzerland</es>
+			<fr>Switzerland</fr>
+			<it>Switzerland</it>
+			<pt>Switzerland</pt>
+			<ru>Швейцария</ru>
+		</string>
+		
+		<string id="T_7">
+			<en>RUSSIA</en>
+			<de>RUSSLAND</de>
+			<es>RUSIA</es>
+			<fr>RUSSIE</fr>
+			<it>RUSSIA</it>
+			<pt>RÚSSIA</pt>
+			<ru>РОССИЯ</ru>
+		</string>
+		
+		<string id="T_8">
+			<en>USA</en>
+			<de>USA</de>
+			<es>USA</es>
+			<fr>USA</fr>
+			<it>USA</it>
+			<pt>USA</pt>
+			<ru>США</ru>
+		</string>
+		
+		<string id="T_9">
+			<en>Sweden</en>
+			<de>Sweden</de>
+			<es>Sweden</es>
+			<fr>Sweden</fr>
+			<it>Sweden</it>
+			<pt>Sweden</pt>
+			<ru>Швеция</ru>
+		</string>
+		
+		<string id="T_10">
+			<en>Finland</en>
+			<de>Finland</de>
+			<es>Finland</es>
+			<fr>Finland</fr>
+			<it>Finland</it>
+			<pt>Finland</pt>
+			<ru>Финляндия</ru>
+		</string>
+		
+		<string id="T_11">
+			<en>Canada</en>
+			<de>Canada</de>
+			<es>Canada</es>
+			<fr>Canada</fr>
+			<it>Canada</it>
+			<pt>Canada</pt>
+			<ru>Канада</ru>
+		</string>
+		
+		<string id="L_DESC">
+			<en>PLAY VARIOUS LEAGUES TO WIN THE PRIZES. YOU GET DIAMONDS FOR EVERY MATCH YOU PLAY, USE THEM TO OPEN PACKS IN THE SHOP.</en>
+			<de>SPIELE IN VERSCHIEDENEN LIGEN, UM DIE PREISE ZU GEWINNEN. FÜR JEDES SPIEL ERHÄLTST DU DIAMANTEN, MIT DENEN DU PACKUNGEN IM SHOP ÖFFNEN KANNST.</de>
+			<es>JUEGA VARIAS LIGAS PARA GANAR LOS PREMIOS. OBTIENES DIAMANTES POR CADA PARTIDO QUE JUEGUES, ÚSALOS PARA ABRIR PACKS EN LA TIENDA.</es>
+			<fr>JOUEZ LES DIFFÉRENTS CHAMPIONNATS POUR GAGNER LES PRIX. VOUS RECEVEZ DES DIAMANTS POUR CHAQUE MATCH QUE VOUS JOUEZ, UTILISEZ-LES POUR OUVRIR DES PACKS DANS LA BOUTIQUE.</fr>
+			<it>GIOCA I VARI CAMPIONATI PER VINCERE I PREMI. OTTIENI DIAMANTI PER OGNI PARTITA GIOCATA, USALI PER APRIRE I PACCHETTI NEL NEGOZIO.</it>
+			<pt>JOGUE EM VÁRIAS LIGAS PARA GANHAR OS PRÊMIOS. VOCÊ GANHA DIAMANTES POR CADA PARTIDA JOGADA, USE-OS PARA ABRIR OS PACOTES NA LOJA.</pt>
+			<ru>ИГРАЙТЕ В РАЗЛИЧНЫХ ЛИГАХ, ЧТОБЫ ВЫИГРАТЬ ПРИЗЫ. ВЫ ПОЛУЧАЕТЕ БРИЛЛИАНТЫ ЗА КАЖДЫЙ СЫГРАННЫЙ МАТЧ, ИСПОЛЬЗУЙТЕ ИХ ДЛЯ ОТКРЫТИЯ НАБОРОВ В МАГАЗИНЕ.</ru>
+		</string>
+
+		<string id="L_N_1">
+			<en>American league</en>
+			<de>Amerikanische Liga</de>
+			<es>Liga americana</es>
+			<fr>Ligue américaine</fr>
+			<it>Lega americana</it>
+			<pt>Liga americana</pt>
+			<ru>Американская лига</ru>
+		</string>
+		
+		<string id="L_N_2">
+			<en>European league</en>
+			<de>Europäische Liga</de>
+			<es>Liga europea</es>
+			<fr>Ligue européenne</fr>
+			<it>Lega europea</it>
+			<pt>Liga europeia</pt>
+			<ru>Европейская лига</ru>
+		</string>
+
+		<string id="L_N_3">
+			<en>Kontinental League</en>
+			<de>Kontinental-Liga</de>
+			<es>Liga Kontinental</es>
+			<fr>Ligue Kontinentale</fr>
+			<it>Lega kontinentale</it>
+			<pt>Liga Kontinental</pt>
+			<ru>Континентальная лига</ru>
+		</string>
+
+		<string id="L_N_4">
+			<en>National League</en>
+			<de>Nationale Liga</de>
+			<es>Liga nacional</es>
+			<fr>Ligue nationale</fr>
+			<it>Lega nazionale</it>
+			<pt>Liga Nacional</pt>
+			<ru>Национальная лига</ru>
+		</string>
+
+		<string id="L_1">
+			<en>Hershey Tigers</en>
+			<de>Hershey Tiger</de>
+			<es>Hershey Tigres</es>
+			<fr>Hershey Tigres</fr>
+			<it>Hershey Tigri</it>
+			<pt>Hershey Tigres</pt>
+			<ru>Херши Тигры</ru>
+		</string>
+		
+		<string id="L_2">
+			<en>Rochester Nationals</en>
+			<de>Rochester Nationals</de>
+			<es>Rochester Nacionales</es>
+			<fr>Rochester Nationaux</fr>
+			<it>Rochester Nazionali</it>
+			<pt>Rochester Nacionais</pt>
+			<ru>Рочестер Националы</ru>
+		</string>
+		
+		<string id="L_3">
+			<en>Milwaukee Generals</en>
+			<de>Milwaukee Generale</de>
+			<es>Milwaukee Generales</es>
+			<fr>Milwaukee Généraux</fr>
+			<it>Milwaukee Generali</it>
+			<pt>Milwaukee Generais</pt>
+			<ru>Милуоки Генералы</ru>
+		</string>
+		
+		<string id="L_4">
+			<en>Coachella Canyon</en>
+			<de>Coachella Canyon</de>
+			<es>Coachella Cañón</es>
+			<fr>Coachella Canyon</fr>
+			<it>Coachella Canyon</it>
+			<pt>Coachella Canyão</pt>
+			<ru>Коачелла Каньон</ru>
+		</string>
+		
+		<string id="L_5">
+			<en>Texas Comets</en>
+			<de>Texas Kometen</de>
+			<es>Texas Cometas</es>
+			<fr>Texas Comètes</fr>
+			<it>Texas Comete</it>
+			<pt>Texas Cometas</pt>
+			<ru>Техас Кометы</ru>
+		</string>
+		
+		<string id="L_6">
+			<en>Hartford Wolf Gang</en>
+			<de>Hartford Wolfbande</de>
+			<es>Hartford Manada de Lobos</es>
+			<fr>Hartford Meute de Loups</fr>
+			<it>Hartford Banda di Lupi</it>
+			<pt>Hartford Gangue de Lobos</pt>
+			<ru>Хартфорд Волк Ганг</ru>
+		</string>
+		
+		<string id="L_7">
+			<en>Utica Meteors</en>
+			<de>Utica Meteore</de>
+			<es>Utica Meteoros</es>
+			<fr>Utica Météores</fr>
+			<it>Utica Meteore</it>
+			<pt>Utica Meteoros</pt>
+			<ru>Утика Метеоры</ru>
+		</string>
+		
+		<string id="L_8">
+			<en>Bern</en>
+			<de>Bern</de>
+			<es>Bern</es>
+			<fr>Bern</fr>
+			<it>Bern</it>
+			<pt>Bern</pt>
+			<ru>Берн</ru>
+		</string>
+		
+		<string id="L_9">
+			<en>Berlin</en>
+			<de>Berlin</de>
+			<es>Berlin</es>
+			<fr>Berlin</fr>
+			<it>Berlin</it>
+			<pt>Berlin</pt>
+			<ru>Берлин</ru>
+		</string>
+		
+		<string id="L_10">
+			<en>Frolunda</en>
+			<de>Frolunda</de>
+			<es>Frolunda</es>
+			<fr>Frolunda</fr>
+			<it>Frolunda</it>
+			<pt>Frolunda</pt>
+			<ru>Фрёлунда</ru>
+		</string>
+		
+		<string id="L_11">
+			<en>Prague</en>
+			<de>Prague</de>
+			<es>Prague</es>
+			<fr>Prague</fr>
+			<it>Prague</it>
+			<pt>Prague</pt>
+			<ru>Прага</ru>
+		</string>
+		
+		<string id="L_12">
+			<en>Helsinki</en>
+			<de>Helsinki</de>
+			<es>Helsinki</es>
+			<fr>Helsinki</fr>
+			<it>Helsinki</it>
+			<pt>Helsinki</pt>
+			<ru>Хельсинки</ru>
+		</string>
+		
+		<string id="L_13">
+			<en>Bratislava</en>
+			<de>Bratislava</de>
+			<es>Bratislava</es>
+			<fr>Bratislava</fr>
+			<it>Bratislava</it>
+			<pt>Bratislava</pt>
+			<ru>Братислава</ru>
+		</string>
+		
+		<string id="L_14">
+			<en>Riga</en>
+			<de>Riga</de>
+			<es>Riga</es>
+			<fr>Riga</fr>
+			<it>Riga</it>
+			<pt>Riga</pt>
+			<ru>Рига</ru>
+		</string>
+		
+		<string id="L_15">
+			<en>St. Petersburg</en>
+			<de>St. Petersburg</de>
+			<es>St. Petersburg</es>
+			<fr>St. Petersburg</fr>
+			<it>St. Petersburg</it>
+			<pt>St. Petersburg</pt>
+			<ru>Санкт-Петербург</ru>
+		</string>
+		
+		<string id="L_16">
+			<en>Minsk</en>
+			<de>Minsk</de>
+			<es>Minsk</es>
+			<fr>Minsk</fr>
+			<it>Minsk</it>
+			<pt>Minsk</pt>
+			<ru>Минск</ru>
+		</string>
+
+		<string id="L_17">
+			<en>Moscow</en>
+			<de>Moscow</de>
+			<es>Moscow</es>
+			<fr>Moscow</fr>
+			<it>Moscow</it>
+			<pt>Moscow</pt>
+			<ru>Москва</ru>
+		</string>
+		
+		<string id="L_18">
+			<en>Novgorod</en>
+			<de>Novgorod</de>
+			<es>Novgorod</es>
+			<fr>Novgorod</fr>
+			<it>Novgorod</it>
+			<pt>Novgorod</pt>
+			<ru>Новгород</ru>
+		</string>
+
+		<string id="L_19">
+			<en>Yaroslavl</en>
+			<de>Yaroslavl</de>
+			<es>Yaroslavl</es>
+			<fr>Yaroslavl</fr>
+			<it>Yaroslavl</it>
+			<pt>Yaroslavl</pt>
+			<ru>Ярославль</ru>
+		</string>
+
+		<string id="L_20">
+			<en>Astana</en>
+			<de>Astana</de>
+			<es>Astana</es>
+			<fr>Astana</fr>
+			<it>Astana</it>
+			<pt>Astana</pt>
+			<ru>Астана</ru>
+		</string>
+
+		<string id="L_21">
+			<en>Magnitogorsk</en>
+			<de>Magnitogorsk</de>
+			<es>Magnitogorsk</es>
+			<fr>Magnitogorsk</fr>
+			<it>Magnitogorsk</it>
+			<pt>Magnitogorsk</pt>
+			<ru>Магнитогорск</ru>
+		</string>
+		
+		<string id="L_22">
+			<en>Chicago</en>
+			<de>Chicago</de>
+			<es>Chicago</es>
+			<fr>Chicago</fr>
+			<it>Chicago</it>
+			<pt>Chicago</pt>
+			<ru>Чикаго</ru>
+		</string>
+		
+		<string id="L_23">
+			<en>Boston</en>
+			<de>Boston</de>
+			<es>Boston</es>
+			<fr>Boston</fr>
+			<it>Boston</it>
+			<pt>Boston</pt>
+			<ru>Бостон</ru>
+		</string>
+		
+		<string id="L_24">
+			<en>Pittsburg</en>
+			<de>Pittsburg</de>
+			<es>Pittsburg</es>
+			<fr>Pittsburg</fr>
+			<it>Pittsburg</it>
+			<pt>Pittsburg</pt>
+			<ru>Питтсбург</ru>
+		</string>
+		
+		<string id="L_25">
+			<en>Detroit</en>
+			<de>Detroit</de>
+			<es>Detroit</es>
+			<fr>Detroit</fr>
+			<it>Detroit</it>
+			<pt>Detroit</pt>
+			<ru>Детройт</ru>
+		</string>
+		
+		<string id="L_26">
+			<en>Montreal</en>
+			<de>Montreal</de>
+			<es>Montreal</es>
+			<fr>Montreal</fr>
+			<it>Montreal</it>
+			<pt>Montreal</pt>
+			<ru>Монреаль</ru>
+		</string>
+		
+		<string id="L_27">
+			<en>New York</en>
+			<de>New York</de>
+			<es>New York</es>
+			<fr>New York</fr>
+			<it>New York</it>
+			<pt>New York</pt>
+			<ru>Нью-Йорк</ru>
+		</string>
+
+		<string id="L_28">
+			<en>Toronto</en>
+			<de>Toronto</de>
+			<es>Toronto</es>
+			<fr>Toronto</fr>
+			<it>Toronto</it>
+			<pt>Toronto</pt>
+			<ru>Торонто</ru>
+		</string>
+		
+		<string id="PRIZE">
+			<en>PRIZE</en>
+			<de>PREIS</de>
+			<es>PREMIO</es>
+			<fr>PRIX</fr>
+			<it>PREMIO</it>
+			<pt>PRÊMIO</pt>
+			<ru>ПРИЗ</ru>
+		</string>
+
+		<string id="TO_WIN">
+			<en>GOALS TO WIN</en>
+			<de>TORE ZU GEWINNEN</de>
+			<es>GOLES PARA GANAR</es>
+			<fr>BUTS POUR GAGNER</fr>
+			<it>GOL PER VINCERE</it>
+			<pt>METAS PARA VENCER</pt>
+			<ru>ГОЛОВ ДЛЯ ПОБЕДЫ</ru>
+		</string>
+
+		<string id="FREE">
+			<en>FREE</en>
+			<de>KOSTENLOS</de>
+			<es>GRATIS</es>
+			<fr>GRATUIT</fr>
+			<it>GRATIS</it>
+			<pt>GRÁTIS</pt>
+			<ru>БЕСПЛАТНО</ru>
+		</string>
+
+		<string id="BUY_IN">
+			<en>BUY IN</en>
+			<de>EINKAUFEN</de>
+			<es>COMPRAR EN</es>
+			<fr>ACHETEZ EN</fr>
+			<it>ACQUISTA IN</it>
+			<pt>COMPRAR EM</pt>
+			<ru>КУПИТЬ ЗА</ru>
+		</string>
+
+		<string id="UNLOCK">
+			<en>UNLOCK</en>
+			<de>FREISCHALTEN</de>
+			<es>DESBLOQUEAR</es>
+			<fr>DÉCHARGER</fr>
+			<it>SBLOCCARE</it>
+			<pt>UNLOCK</pt>
+			<ru>ОТКРЫТЬ</ru>
+		</string>
+
+        <string id="CLAIM">
+            <en>Claim</en>
+            <es>Solicitar</es>
+            <de>Abholen</de>
+            <it>Riscuoti</it>
+            <fr>Réclamer</fr>
+            <ru>Претендовать</ru>
+            <pt>Solicitar</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+		
+		<string id="FORCE">
+			<en>FORCE</en>
+			<de>KRAFT</de>
+			<es>FUERZA</es>
+			<fr>FORCE</fr>
+			<it>FORZA</it>
+			<pt>FORÇA</pt>
+			<ru>СИЛА</ru>
+		</string>
+		
+		<string id="AIM">
+			<en>AIM</en>
+			<de>ZIELEN</de>
+			<es>APUNTAR</es>
+			<fr>VISER</fr>
+			<it>MIRARE</it>
+			<pt>MIRAR</pt>
+			<ru>ЦЕЛИТЬСЯ</ru>
+		</string>
+
+		<string id="USE">
+			<en>USE</en>
+			<de>VERWENDEN</de>
+			<es>USAR</es>
+			<fr>UTILISER</fr>
+			<it>UTILIZZARE</it>
+			<pt>UTILIZAÇÃO</pt>
+			<ru>ИСПОЛЬЗОВАТЬ</ru>
+		</string>
+
+		<string id="USING">
+			<en>USING</en>
+			<de>VERWENDUNG</de>
+			<es>USAR</es>
+			<fr>EN UTILISANT</fr>
+			<it>UTILIZZARE</it>
+			<pt>UTILIZANDO</pt>
+			<ru>ИСПОЛЬЗУЕТСЯ</ru>
+		</string>
+
+		<string id="YOGO">
+			<en>YOU GOT</en>
+			<de>DU HAST</de>
+			<es>OBTIENES</es>
+			<fr>VOUS OBTENEZ</fr>
+			<it>HAI</it>
+			<pt>VOCÊ TEM</pt>
+			<ru>ЧТО ВЫ ПОЛУЧИЛИ</ru>
+		</string>
+
+		<string id="OK">
+			<en>OK</en>
+            <de>OK</de>
+            <es>Aceptar</es>
+            <fr>OK</fr>
+            <it>OK</it>
+            <pt>OK</pt>
+            <ru>ОК</ru>
+		</string>
+
+		<string id="DAILY">
+			<en>DAILY</en>
+			<de>TÄGLICHE </de>
+			<es>RECOMPENSA</es>
+			<fr>RÉCOMPENSE </fr>
+			<it>GIORNALIERO</it>
+			<pt>DIÁRIO</pt>
+			<ru>ЕЖЕДНЕВНОЕ</ru>
+		</string>
+
+		<string id="COMMON">
+			<en>COMMON</en>
+			<de>GEMEINSAM</de>
+			<es>COMÚN</es>
+			<fr>COMMUNE</fr>
+			<it>COMUNE</it>
+			<pt>COMUM</pt>
+			<ru>ОБЫЧНЫЙ</ru>
+		</string>
+		
+		<string id="EPIC">
+			<en>EPIC</en>
+			<de>EPIC</de>
+			<es>ÉPICO</es>
+			<fr>EPIC</fr>
+			<it>EPICO</it>
+			<pt>EPIC</pt>
+			<ru>ЭПИЧЕСКИЙ</ru>
+		</string>
+		
+		<string id="RARE">
+			<en>RARE</en>
+			<de>SELTEN</de>
+			<es>RARO</es>
+			<fr>RARE</fr>
+			<it>RARO</it>
+			<pt>RARE</pt>
+			<ru>РЕДКИЙ</ru>
+		</string>
+
+		<string id="FIELD_4">
+			<en>KRAKEN RINK</en>
+			<de>KRAKEN-REISSE</de>
+			<es>PISTA KRAKEN</es>
+			<fr>RINCE KRAKEN</fr>
+			<it>PISTA DI RAGGIUNGIMENTO</it>
+			<pt>PISTA RACHADA</pt>
+			<ru>КРАКЕНЫЙ РИНК</ru>
+		</string>
+
+		<string id="FIELD_3">
+			<en>SHINY RINK</en>
+			<de>GLÄNZENDER EISLAUFPLATZ</de>
+			<es>ARENA BRILLANTE</es>
+			<fr>RINCE ÉCLATANTE</fr>
+			<it>RUGGINE LUCIDA</it>
+			<pt>RINGUE BRILHANTE</pt>
+			<ru>БЛЕСТЯЩИЙ КАТОК</ru>
+		</string>
+		
+		<string id="FIELD_2">
+			<en>CRACKED RINK</en>
+			<de>RISSIGER RINK</de>
+			<es>PISTA AGRIETADA</es>
+			<fr>RINCE FISSURÉE</fr>
+			<it>PISTA DI PATTINAGGIO SCREPOLATA</it>
+			<pt>RINCO RACHADO</pt>
+			<ru>РАСТРЕСКАВШИЙСЯ КАТОК</ru>
+		</string>
+
+		<string id="FIELD_1">
+			<en>WATERLY RINK</en>
+			<de>WASSERIGE RINK</de>
+			<es>PISTA DE PATINAJE</es>
+			<fr>RINCE D'EAU</fr>
+			<it>PISTA DI PATTINAGGIO</it>
+			<pt>RINCHO AGUADO</pt>
+			<ru>ВОДЯНОЙ РИНК</ru>
+		</string>
+
+		<string id="PLAYER">
+			<en>PLAYER</en>
+			<de>SPIELER</de>
+			<es>JUGADOR</es>
+			<fr>JOUEUR</fr>
+			<it>GIOCATORE</it>
+			<pt>JOGADOR</pt>
+			<ru>ИГРОК</ru>
+		</string>
+
+        <string id="GAME_OVER">
+            <en>Game over</en>
+            <es>Fin del juego</es>
+            <de>Spiele ende</de>
+            <it>Fine del gioco</it>
+            <fr>Partie terminée</fr>
+            <ru>ИГРА ОКОНЧЕНА!</ru>
+            <pt>Fim de jogo</pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+        <string id="FOUL_DESC">
+            <en>You can't score a goal from a kick off</en>
+            <de>Mit einem Anstoß kann man kein Tor schießen</de>
+            <es>No se puede marcar un gol con un saque de puerta</es>
+            <fr>On ne peut pas marquer un but sur un coup d'envoi</fr>
+            <it>Non si può segnare un gol da un calcio d'inizio</it>
+            <pt>Você não pode marcar um gol de um pontapé inicial</pt>
+            <ru>Вы не можете забить гол с пенальти</ru>
+        </string>
+
+        <string id="OPPONENT_TURN">
+            <en>Opponent's turn</en>
+            <de>Der Gegner ist am Zug</de>
+            <es>Turno del adversario</es>
+            <fr>Tour de l'adversaire</fr>
+            <it>Turno dell'avversario</it>
+            <pt>É a vez do oponente</pt>
+            <ru>Ход противника</ru>
+        </string>
+
+        <string id="BEAT_TO_WIN">
+            <en>BEAT ALL 4 TEAMS</en>
+            <de>ALLE 4 TEAMS BESIEGEN</de>
+            <es>VENCER A LOS 4 EQUIPOS</es>
+            <fr>BATTRE LES 4 ÉQUIPES</fr>
+            <it>BATTERE TUTTE E 4 LE SQUADRE</it>
+            <pt>VENÇA AS 4 EQUIPES</pt>
+            <ru>ПОБЕДИТЬ ВСЕ 4 КОМАНДЫ</ru>
+        </string>
+
+        <string id="RINGS">
+            <en>RINGS</en>
+            <de>RINGE</de>
+            <es>ANILLOS</es>
+            <fr>ANNEAUX</fr>
+            <it>ANELLI</it>
+            <pt>ANÉIS</pt>
+            <ru>КОЛЬЦА</ru>
+        </string>
+
+        <string id="FORMATIONS">
+            <en>FORMATIONS</en>
+            <de>FORMATIONEN</de>
+            <es>FORMACIONES</es>
+            <fr>FORMATIONS</fr>
+            <it>FORMAZIONI</it>
+            <pt>FORMAÇÕES</pt>
+            <ru>ФОРМАЦИИ</ru>
+        </string>
+
+        <string id="WIN_OR_TIME">
+            <en>SCORE [X] GOALS OR WIN IN TIME</en>
+            <de>[X] TORE SCHIEßEN ODER IN DER ZEIT GEWINNEN</de>
+            <es>MARCAR [X] GOLES O GANAR A TIEMPO</es>
+            <fr>MARQUER [X] BUALS OU GAGNER DANS LE TEMPS</fr>
+            <it>SEGNARE [X] GOALS O VINCERE NEL TEMPO</it>
+            <pt>MARCAR [X] GOLS OU VENCER NO TEMPO</pt>
+            <ru>ЗАБЕЙТЕ [X] ГОЛОВ ИЛИ ВЫИГРАЙТЕ ВО ВРЕМЯ</ru>
+        </string>
+
+		<string id="TIME_IS_UP">
+			<en>Time is up</en>
+			<de>Die Zeit ist um</de>
+			<es>Se acabó el tiempo</es>
+			<fr>O tempo acabou</fr>
+			<it>Il tempo è scaduto</it>
+			<pt>Le temps est écoulé</pt>
+			<ru>Время вышло</ru>
+		</string>
+
+		<string id="NEXT_GOAL_WINS">
+			<en>Next goal wins</en>
+			<de>Nächstes Ziel gewinnt</de>
+			<es>Gana el siguiente gol</es>
+			<fr>O próximo gol vence</fr>
+			<it>Il prossimo obiettivo è vincere</it>
+			<pt>Le prochain objectif est de gagner</pt>
+			<ru>Побеждает следующий гол</ru>
+		</string>
+
+		<string id="AD_TEXT">
+			<en>AD</en>
+			<de>AD</de>
+			<es>AD</es>
+			<fr>AD</fr>
+			<it>AD</it>
+			<pt>AD</pt>
+			<ru>Рекл.</ru>
+		</string>
+
+        <string id="VERSUS">
+			<en>VS</en>
+			<de>VS</de>
+			<es>VS</es>
+			<fr>VS</fr>
+			<it>VS</it>
+			<pt>VS</pt>
+			<ru>И</ru>
+        </string>
+
+
+        <string id="VOID">
+            <en></en>
+            <es></es>
+            <de></de>
+            <it></it>
+            <fr></fr>
+            <ru></ru>
+            <pt></pt>
+            <nl></nl>
+            <no></no>
+        </string>
+
+    </strings>
+</stringresources>
