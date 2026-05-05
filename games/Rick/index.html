@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="jet">
+    <title>Full Screen Video</title>
+    <style>
+        /* Remove all spacing and hide scrollbars */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Make video fill the entire viewport */
+        #myVideo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <video id="myVideo" autoplay muted loop playsinline>
+        <source src="vid/Voicy_rick-roll.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        // Unmute and enter true fullscreen on first click
+        document.addEventListener('click', function() {
+            const video = document.getElementById('myVideo');
+            video.muted = false;
+            
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            }
+        }, { once: true });
+    </script>
+
+</body>
+</html>
