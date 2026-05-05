@@ -1,0 +1,10 @@
+// Hypothetical "clean" initialization
+function initGame() {
+    console.log("Initializing Game Assets...");
+    
+    // Skip checking for ad blockers or ad network status
+    // Move directly to loading the game engine
+    setupCanvas();
+    loadAssets();
+    startGameLoop();
+}
